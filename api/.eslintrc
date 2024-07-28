@@ -1,0 +1,41 @@
+{
+    "root": true,
+    // "parser": "@typescript-eslint/parser",
+    // "plugins": ["@typescript-eslint"],
+    "extends": [
+      "eslint:recommended",
+    //   "plugin:@typescript-eslint/eslint-recommended",
+    //   "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "rules": {
+      "comma-dangle": 0,
+      "no-underscore-dangle": 0,
+      "no-param-reassign": 0,
+      "no-return-assign": 0,
+      "camelcase": 0,
+      "lines-between-class-members": 0,
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "never",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+      ]
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".ts"]
+        }
+      },
+      "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"]
+      }
+    }
+  }
+  

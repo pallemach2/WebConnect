@@ -1,0 +1,102 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id              String           @id @default(cuid())
+    email           String           @unique
+    username        String           @unique
+    password        String
+    active          Boolean          @default(true)
+    lastSeen        DateTime?
+    Avatar          String?
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+    Session         Session[]
+    PasswordForgot  PasswordForgot?
+    ChatParticipant ChatParticipant?
+    UserSettings    UserSettings[]
+}
+
+model UserSettings {
+    id           String   @id @default(cuid())
+    User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String
+    showLastSeen Boolean  @default(true)
+    showOnline   Boolean  @default(true)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
+model Session {
+    id                 String   @id @default(cuid())
+    User               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId             String
+    token              String
+    tokenExpire        DateTime
+    refreshToken       String
+    refreshTokenExpire DateTime
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @updatedAt
+}
+
+model PasswordForgot {
+    id         String   @id @default(cuid())
+    User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId     String   @unique
+    validUntil DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model Chat {
+    id              String           @id @default(cuid())
+    active          Boolean          @default(false)
+    Avatar          String?
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+    ChatParticipant ChatParticipant?
+    Message         Message?
+}
+
+model ChatParticipant {
+    id          String        @id @default(cuid())
+    User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String        @unique
+    Chat        Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId      String        @unique
+    creator     Boolean       @default(false)
+    admin       Boolean       @default(false)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    Message     Message[]
+    MessageSeen MessageSeen[]
+}
+
+model Message {
+    id                String          @id @default(cuid())
+    Chat              Chat            @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId            String          @unique
+    ChatParticipant   ChatParticipant @relation(fields: [chatParticipantId], references: [id], onDelete: Cascade)
+    chatParticipantId String
+    content           String
+    edited            Boolean         @default(false)
+    image             String?
+    createdAt         DateTime        @default(now())
+    updatedAt         DateTime        @updatedAt
+    MessageSeen       MessageSeen[]
+}
+
+model MessageSeen {
+    id                String          @id @default(cuid())
+    ChatParticipant   ChatParticipant @relation(fields: [chatParticipantId], references: [id], onDelete: Cascade)
+    chatParticipantId String
+    Message           Message         @relation(fields: [messageId], references: [id], onDelete: Cascade)
+    messageId         String
+    timestamp         DateTime        @default(now())
+}

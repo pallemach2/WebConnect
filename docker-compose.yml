@@ -1,0 +1,41 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: webconnect_db
+    restart: always
+    env_file: docker.env
+    volumes:
+      - ./dockerfiles/mysql:/var/lib/mysql
+    ports:
+      - 5506:3306
+  api:
+    container_name: webconnect_api
+    depends_on:
+      - mariadb
+    links:
+      - mariadb:db
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/api/Dockerfile
+    restart: always
+    env_file: docker.env
+    volumes:
+      - ./api:/usr/src/app/appfiles
+    ports:
+      - "4000:4000"
+      - "5555:5555"
+  phpmyadmin:
+    container_name: webconnect_pma
+    depends_on:
+      - mariadb
+    links:
+      - mariadb:db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=topsecret
+      - UPLOAD_LIMIT=300M
