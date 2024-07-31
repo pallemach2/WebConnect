@@ -8,7 +8,7 @@ ENV         DEBIAN_FRONTEND 		noninteractive
 ENV			LC_ALL 					C.UTF-8
 ENV			ENV						dev
 
-EXPOSE 		4000 5555
+EXPOSE 		4000 5555 9229
 
 # Create App-directory
 WORKDIR     /usr/src/app/appfiles

@@ -5,7 +5,8 @@
   "scripts": {
     "build:prod": "npm run build:clean && tsc --build --verbose .",
     "build:clean": "rm -rf ./dist",
-    "start:dev": "nodemon --watch src --delay 300ms --legacy-watch --exec 'ts-node --swc' src/index.ts",
+    "start:dev2": "nodemon --inspect=0.0.0.0:9229 --signal SIGINT --nolazy --watch src --delay 300ms --legacy-watch --exec 'node --require ts-node/register' src/index.ts",
+    "start:dev": "nodemon --inspect=0.0.0.0:9229 --signal SIGINT --nolazy -L --exec 'node --require ts-node/register' src/index.ts",
     "start:prod": "NODE_ENV=production node dist/index.js",
     "lint": "eslint --fix src",
     "prisma:studio": "npx prisma studio"

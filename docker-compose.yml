@@ -24,6 +24,7 @@ services:
     ports:
       - "4000:4000"
       - "5555:5555"
+      - "9229:9229"
   phpmyadmin:
     container_name: webconnect_pma
     depends_on:

@@ -4,8 +4,8 @@ import Jwt from 'jsonwebtoken';
 
 // Custom imports
 import Request from '../interfaces/request.interface';
-// import { JwtPayload } from '../interfaces/auth.interface';
-// import UserService from '../services/user.service';
+import UserService from '../services/user.service';
+import { JwtPayload } from 'interfaces/auth.interface';
 
 // Protect a route and add user and to context
 async function protectionMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -14,17 +14,16 @@ async function protectionMiddleware(req: Request, res: Response, next: NextFunct
     if (!tk) throw new Error('api.errors.tokenHeaderMissing');
 
     try {
-      //   const decoded = Jwt.verify(tk as string, process.env.API_SECRET) as JwtPayload;
+      const decoded = Jwt.verify(tk as string, process.env.API_SECRET) as JwtPayload;
 
-      //   const user = await UserService.findById(decoded.userId, req.ctx.prisma);
+      const user = await UserService.findById(decoded.userId);
 
-      //   // Delete sensible informations
-      //   delete user.password;
-      //   delete user.priceclass;
+      // Delete sensible informations
+      delete user.password;
 
-      //   // Set userdata in ctx
-      //   req.ctx.profile = user;
-      //   req.ctx.token = '';
+      // Set userdata in ctx
+      req.ctx.user = user;
+      req.ctx.token = '';
 
       next();
     } catch (e) {

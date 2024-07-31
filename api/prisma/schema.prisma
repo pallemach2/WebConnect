@@ -8,19 +8,19 @@ datasource db {
 }
 
 model User {
-    id              String           @id @default(cuid())
-    email           String           @unique
-    username        String           @unique
+    id              String            @id @default(cuid())
+    email           String            @unique
+    username        String            @unique
     password        String
-    active          Boolean          @default(true)
+    active          Boolean           @default(true)
     lastSeen        DateTime?
     Avatar          String?
-    createdAt       DateTime         @default(now())
-    updatedAt       DateTime         @updatedAt
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
     Session         Session[]
     PasswordForgot  PasswordForgot?
-    ChatParticipant ChatParticipant?
     UserSettings    UserSettings[]
+    ChatParticipant ChatParticipant[]
 }
 
 model UserSettings {
@@ -55,21 +55,22 @@ model PasswordForgot {
 }
 
 model Chat {
-    id              String           @id @default(cuid())
-    active          Boolean          @default(false)
-    Avatar          String?
-    createdAt       DateTime         @default(now())
-    updatedAt       DateTime         @updatedAt
-    ChatParticipant ChatParticipant?
-    Message         Message?
+    id              String            @id @default(cuid())
+    active          Boolean           @default(true)
+    avatar          String?
+    name            String?
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+    ChatParticipant ChatParticipant[]
+    Message         Message[]
 }
 
 model ChatParticipant {
     id          String        @id @default(cuid())
     User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId      String        @unique
+    userId      String
     Chat        Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
-    chatId      String        @unique
+    chatId      String
     creator     Boolean       @default(false)
     admin       Boolean       @default(false)
     createdAt   DateTime      @default(now())
@@ -81,7 +82,7 @@ model ChatParticipant {
 model Message {
     id                String          @id @default(cuid())
     Chat              Chat            @relation(fields: [chatId], references: [id], onDelete: Cascade)
-    chatId            String          @unique
+    chatId            String
     ChatParticipant   ChatParticipant @relation(fields: [chatParticipantId], references: [id], onDelete: Cascade)
     chatParticipantId String
     content           String
@@ -99,4 +100,8 @@ model MessageSeen {
     Message           Message         @relation(fields: [messageId], references: [id], onDelete: Cascade)
     messageId         String
     timestamp         DateTime        @default(now())
+}
+
+model Test {
+    id String @id @default(cuid())
 }

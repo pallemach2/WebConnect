@@ -8,7 +8,40 @@
   <body>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
-      var socket = io("http://localhost:4000");
+      fetch("http://localhost:4000/api/auth/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "Palle",
+          password: "Topsecret123!",
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          var socket = io("http://localhost:4000", {
+            auth: {
+              token: res.token,
+            },
+          });
+
+          // socket.emit("chat-new", { name: "testChat", users: [] });
+          socket.emit("user-online");
+
+          socket.on("user-online", (data) => {
+            console.log(data);
+          });
+
+          // client-side
+          socket.on("connect_error", (err) => {
+            console.log(err instanceof Error); // true
+            console.log(err.message); // not authorized
+            console.log(err.data); // { content: "Please retry later" }
+          });
+        });
     </script>
     <h1>Welcome to My Web Page</h1>
 
