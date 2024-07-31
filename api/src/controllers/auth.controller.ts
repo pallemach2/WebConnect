@@ -7,7 +7,6 @@ import Rq from '@interfaces/request.interface';
 import EncryptionService from '@services/encryption.service';
 import UserService from '@services/user.service';
 import SessionService from '@services/session.service';
-import { NotFoundError } from '@prisma/client/runtime/library';
 
 /**
  * Controls all Auth actions

@@ -9,11 +9,7 @@
         "port": 9229,
         "address": "localhost",
         "localRoot": "${workspaceFolder}/api",
-        "remoteRoot": "/usr/src/app/appfiles",
-        "console": "externalTerminal",
-        "debugOptions": [
-          "RedirectOutput"
-      ]
+        "remoteRoot": "/usr/src/app/appfiles"
       }
     ]
   }
