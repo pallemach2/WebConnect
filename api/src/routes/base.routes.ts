@@ -2,8 +2,8 @@
 import { NextFunction, Router, Request, Response } from 'express';
 
 // Custom imports
-import Route from '../interfaces/route.interface';
-import protectionMiddleware from '../middleware/protection.middleware';
+import Route from '@interfaces/route.interface';
+import protectionMiddleware from '@middleware/protection.middleware';
 
 abstract class BaseRoutes {
   routes: Array<Route>;

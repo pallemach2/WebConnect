@@ -12,6 +12,8 @@ import cors from 'cors';
 import ConnectionEvent from './events/connection.event';
 import GeneralRoutes from './routes/general.routes';
 import protectionSocketMiddleware from './middleware/protectionSocket.middleware';
+import ChatRoutes from './routes/chat.routes';
+import MessageRoutes from './routes/message.routes';
 
 // Initialize Logger
 Log.init(process.env.NODE_ENV, {
@@ -33,6 +35,8 @@ router.use(contextMiddleware); // --> Add context to request
 
 router.use(AuthRoutes.getRouter()); // --> Add Auth Routes
 router.use(GeneralRoutes.getRouter()); // --> Add Auth Routes
+router.use(ChatRoutes.getRouter()); // --> Add Auth Routes
+router.use(MessageRoutes.getRouter()); // --> Add Auth Routes
 
 router.use(notfoundMiddleware); // --> Handle 404
 router.use(errorMiddleware); // --> Handle errors

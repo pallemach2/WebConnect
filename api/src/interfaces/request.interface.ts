@@ -2,7 +2,7 @@
 import { Request as expReq } from 'express';
 
 // Custom imports
-import Context from './context.interface';
+import Context from '@interfaces/context.interface';
 
 interface Request extends expReq {
   ctx: Context;

@@ -1,7 +1,10 @@
+// Package imports
 import { Socket } from 'socket.io';
 import * as yup from 'yup';
-import PrismaService from '../../services/prisma.service';
-import SocketService from '../../services/socket.service';
+
+// Custom imports
+import PrismaService from '@services/prisma.service';
+import SocketService from '@services/socket.service';
 
 class ChatInviteEvent {
   static getEventName() {
@@ -38,7 +41,7 @@ class ChatInviteEvent {
     socket.to(chat.id).emit('user-new', {
       username: user.username,
       lastSeen: user.lastSeen,
-      avatar: user.Avatar,
+      avatar: user.avatar,
       id: user.id,
     });
 

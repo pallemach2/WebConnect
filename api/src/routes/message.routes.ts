@@ -1,11 +1,11 @@
 // Custom imports
 import Route from '@interfaces/route.interface';
 import BaseRoutes from '@routes/base.routes';
-import GeneralController from '@controllers/general.controller';
+import MessageController from '@controllers/message.controller';
 
-class GeneralRoutes extends BaseRoutes {
+class MessageRoutes extends BaseRoutes {
   static getPath() {
-    return '/general';
+    return '/message';
   }
 
   static getRoutes() {
@@ -14,7 +14,7 @@ class GeneralRoutes extends BaseRoutes {
         path: '/ping',
         method: 'get',
         protected: true,
-        action: GeneralController.ping,
+        action: MessageController.ping,
       },
     ];
 
@@ -22,4 +22,4 @@ class GeneralRoutes extends BaseRoutes {
   }
 }
 
-export default GeneralRoutes;
+export default MessageRoutes;

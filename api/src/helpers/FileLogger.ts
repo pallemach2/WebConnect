@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// Package imports
 import fs from 'fs';
-// eslint-disable-next-line import/no-cycle
-import { LoggerOptions, logLevel } from './Logger';
+
+// Custom imports
+import { LoggerOptions, logLevel } from '@helpers/Logger';
 
 class FileLogger {
   env: string;

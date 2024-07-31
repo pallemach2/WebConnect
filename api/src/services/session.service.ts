@@ -3,9 +3,9 @@ import { PrismaClient, Session, User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 
 // Custom imports
-import Log from '../helpers/Logger';
-import PrismaService from './prisma.service';
-import EncryptionService from './encryption.service';
+import Log from '@helpers/Logger';
+import PrismaService from '@services/prisma.service';
+import EncryptionService from '@services/encryption.service';
 
 class SessionService {
   /**

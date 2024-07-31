@@ -7,7 +7,7 @@ import Rq from '@interfaces/request.interface';
 /**
  * Controls all Auth actions
  */
-class GeneralController {
+class MessageController {
   /**
    * GET /ping
    * @param req
@@ -23,4 +23,4 @@ class GeneralController {
   };
 }
 
-export default GeneralController;
+export default MessageController;

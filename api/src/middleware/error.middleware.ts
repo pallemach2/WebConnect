@@ -2,8 +2,8 @@
 import { NextFunction, Response } from 'express';
 
 // Custom imports
-import Request from '../interfaces/request.interface';
-import Log from '../helpers/Logger';
+import Request from '@interfaces/request.interface';
+import Log from '@helpers/Logger';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function errorMiddleware(err: Error, req: Request, res: Response, _: NextFunction) {

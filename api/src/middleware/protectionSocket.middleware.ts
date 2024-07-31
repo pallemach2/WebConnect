@@ -1,11 +1,11 @@
 // Package imports
 import Jwt from 'jsonwebtoken';
+import { Socket } from 'socket.io';
 
 // Custom imports
-import UserService from '../services/user.service';
-import { JwtPayload } from 'interfaces/auth.interface';
-import { Socket } from 'socket.io';
-import SocketService from '../services/socket.service';
+import UserService from '@services/user.service';
+import { JwtPayload } from '@interfaces/auth.interface';
+import SocketService from '@services/socket.service';
 
 // Protect a route and add user and to context
 async function protectionSocketMiddleware(socket: Socket, next: any): Promise<void> {

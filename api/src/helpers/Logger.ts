@@ -1,4 +1,5 @@
-import FileLogger from './FileLogger';
+// Custom imports
+import FileLogger from '@helpers/FileLogger';
 
 export type logLevel = 'error' | 'warn' | 'info' | 'log' | 'debug';
 

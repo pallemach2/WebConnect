@@ -1,7 +1,10 @@
+// Package imports
 import { Socket } from 'socket.io';
 import * as yup from 'yup';
-import PrismaService from '../../services/prisma.service';
-import SocketService from '../../services/socket.service';
+
+// Custom imports
+import PrismaService from '@services/prisma.service';
+import SocketService from '@services/socket.service';
 
 class ChatLeaveEvent {
   static getEventName() {
@@ -25,6 +28,7 @@ class ChatLeaveEvent {
     await prisma.chatParticipant.delete({ where: { id: userParticipant.id } });
 
     // Inform other clients about new user
+    socket.to(data.chatId).emit('chat-leave', data.chatId);
     socket.leave(data.chatId);
   }
 }

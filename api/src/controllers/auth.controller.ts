@@ -3,10 +3,12 @@ import { Response as Rs, NextFunction as Nx } from 'express';
 import * as yup from 'yup';
 
 // Custom imports
-import Rq from '../interfaces/request.interface';
-import EncryptionService from '../services/encryption.service';
-import UserService from '../services/user.service';
-import SessionService from '../services/session.service';
+import Rq from '@interfaces/request.interface';
+import EncryptionService from '@services/encryption.service';
+import UserService from '@services/user.service';
+import SessionService from '@services/session.service';
+import { NotFoundError } from '@prisma/client/runtime/library';
+
 /**
  * Controls all Auth actions
  */
@@ -31,6 +33,7 @@ class AuthController {
       // find user
       try {
         user = await UserService.findByUsername(req.body.username);
+        if (!user) throw new Error();
       } catch (e) {
         throw new Error('api.errors.authentication.userNotFound');
       }

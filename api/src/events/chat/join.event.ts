@@ -1,6 +1,9 @@
+// Package imports
 import { Socket } from 'socket.io';
 import * as yup from 'yup';
-import PrismaService from '../../services/prisma.service';
+
+// Custom imports
+import PrismaService from '@services/prisma.service';
 
 class ChatJoinEvent {
   static getEventName() {

@@ -1,3 +1,4 @@
+// Package imports
 import { randomBytes, scryptSync } from 'crypto';
 
 class EncryptionService {

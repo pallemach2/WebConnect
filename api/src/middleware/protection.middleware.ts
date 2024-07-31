@@ -3,9 +3,9 @@ import { Response, NextFunction } from 'express';
 import Jwt from 'jsonwebtoken';
 
 // Custom imports
-import Request from '../interfaces/request.interface';
-import UserService from '../services/user.service';
-import { JwtPayload } from 'interfaces/auth.interface';
+import Request from '@interfaces/request.interface';
+import UserService from '@services/user.service';
+import { JwtPayload } from '@interfaces/auth.interface';
 
 // Protect a route and add user and to context
 async function protectionMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {

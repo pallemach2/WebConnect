@@ -1,5 +1,5 @@
 // Package imports
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { User } from '@prisma/client';
 
 export const socketLocals = new WeakMap<Socket, User>();

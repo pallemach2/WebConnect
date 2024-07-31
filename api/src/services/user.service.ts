@@ -1,10 +1,10 @@
 // Package imports
-import { PasswordForgot, PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
 // Custom imports
-import PrismaService from './prisma.service';
-import EncryptionService from './encryption.service';
-import SessionService from './session.service';
+import PrismaService from '@services/prisma.service';
+import EncryptionService from '@services/encryption.service';
+import SessionService from '@services/session.service';
 
 class UserService {
   /**

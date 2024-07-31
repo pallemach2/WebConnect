@@ -1,7 +1,8 @@
 // Package imports
 import { NextFunction, Response } from 'express';
-import Request from '../interfaces/request.interface';
-import PrismaService from 'services/prisma.service';
+
+// Custom imports
+import Request from '@interfaces/request.interface';
 
 // Attach Context
 function contextMiddleware(req: Request, res: Response, next: NextFunction): void {

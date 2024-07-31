@@ -1,7 +1,7 @@
 // Custom imports
-import Route from '../interfaces/route.interface';
-import AuthController from '../controllers/auth.controller';
-import BaseRoutes from './base.routes';
+import Route from '@interfaces/route.interface';
+import AuthController from '@controllers/auth.controller';
+import BaseRoutes from '@routes/base.routes';
 
 class AuthRoutes extends BaseRoutes {
   static getPath() {

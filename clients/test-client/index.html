@@ -29,7 +29,10 @@
           });
 
           // socket.emit("chat-new", { name: "testChat", users: [] });
-          socket.emit("user-online");
+          // socket.emit("message-new", {
+          //   content: "Dies ist eine Nachricht.",
+          //   chatId: "clzac183800013oao40jqjno5",
+          // });
 
           socket.on("user-online", (data) => {
             console.log(data);

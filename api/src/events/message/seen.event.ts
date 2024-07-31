@@ -1,7 +1,10 @@
+// Package imports
 import { Socket } from 'socket.io';
-import SocketService from '../../services/socket.service';
 import * as yup from 'yup';
-import PrismaService from '../../services/prisma.service';
+
+// Custom imports
+import PrismaService from '@services/prisma.service';
+import SocketService from '@services/socket.service';
 
 class MessageSeenEvent {
   static getEventName() {
