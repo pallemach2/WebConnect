@@ -42,7 +42,6 @@ const main = async () => {
   router.use(AuthRoutes.getRouter()); // --> Add Auth Routes
   router.use(GeneralRoutes.getRouter()); // --> Add Auth Routes
   router.use(ChatRoutes.getRouter()); // --> Add Auth Routes
-  router.use(MessageRoutes.getRouter()); // --> Add Auth Routes
 
   router.use(notfoundMiddleware); // --> Handle 404
   router.use(errorMiddleware); // --> Handle errors

@@ -1,5 +1,6 @@
 // Package imports
 import { Response as Rs, NextFunction as Nx } from 'express';
+import * as yup from 'yup';
 
 // Custom imports
 import Rq from '@interfaces/request.interface';
@@ -68,6 +69,7 @@ class ChatController {
                 },
               },
             },
+            take: 50,
             orderBy: {
               createdAt: 'asc',
             },
@@ -89,6 +91,12 @@ class ChatController {
    */
   static get = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
     try {
+      // Define and validate params
+      const schema = yup.object().shape({
+        id: yup.string().required('api.errors.validator.idNotEmpty'),
+      });
+      await schema.validate(req.params);
+
       const prisma = PrismaService.getInstance();
 
       await prisma.chatParticipant.findFirstOrThrow({
@@ -137,6 +145,7 @@ class ChatController {
                 },
               },
             },
+            take: 50,
             orderBy: {
               createdAt: 'asc',
             },
@@ -145,6 +154,59 @@ class ChatController {
       });
 
       res.json(chat);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  /**
+   * GET /:id/messages/:page
+   * @param req
+   * @param res
+   * @param next
+   */
+  static getMessages = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
+    try {
+      // Define and validate params
+      const schema = yup.object().shape({
+        id: yup.string().required('api.errors.validator.idNotEmpty'),
+        page: yup.number().required('api.errors.validator.pageNotEmpty'),
+      });
+      await schema.validate(req.params);
+
+      const prisma = PrismaService.getInstance();
+
+      await prisma.chatParticipant.findFirstOrThrow({
+        where: { userId: req.ctx.user.id, chatId: req.params.id },
+        select: { chatId: true },
+      });
+
+      const messages = await prisma.message.findMany({
+        where: {
+          chatId: req.params.id,
+        },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          edited: true,
+          ChatParticipant: {
+            select: {
+              id: true,
+              User: {
+                select: {
+                  id: true,
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+        skip: parseInt(req.params.page) * 50 - 50,
+        take: 50,
+      });
+
+      res.json(messages);
     } catch (e) {
       next(e);
     }
