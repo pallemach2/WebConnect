@@ -25,6 +25,34 @@ services:
       - "4000:4000"
       - "5555:5555"
       - "9229:9229"
+  react:
+    container_name: webconnect_react
+    depends_on:
+      - api
+    links:
+      - api:api
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/react/Dockerfile
+    restart: always
+    volumes:
+      - ./clients/react-client:/usr/src/app/appfiles
+    ports:
+      - 5000:5000
+  svelte:
+    container_name: webconnect_svelte
+    depends_on:
+      - api
+    links:
+      - api:api
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/svelte/Dockerfile
+    restart: always
+    volumes:
+      - ./clients/svelte-client:/usr/src/app/appfiles
+    ports:
+      - 5050:5050
   phpmyadmin:
     container_name: webconnect_pma
     depends_on:
