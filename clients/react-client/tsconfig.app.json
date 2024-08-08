@@ -21,7 +21,16 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@assets/*": ["./assets/*"],
+      "@events/*": ["./events/*"],
+      "@services/*": ["./services/*"],
+      "@components/*": ["./components/*"],
+      "@pages/*": ["./pages/*"],
+      "@styles/*": ["./styles/*"],
+      "@languages/*": ["./languages/*"]
+    }
   },
   "include": ["src"]
 }

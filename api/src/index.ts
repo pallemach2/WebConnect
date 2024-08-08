@@ -18,7 +18,6 @@ import ConnectionEvent from '@events/connection.event';
 import AuthRoutes from '@routes/auth.routes';
 import GeneralRoutes from '@routes/general.routes';
 import ChatRoutes from '@routes/chat.routes';
-import MessageRoutes from '@routes/message.routes';
 
 const main = async () => {
   // Initialize Logger

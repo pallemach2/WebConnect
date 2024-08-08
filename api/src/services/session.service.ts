@@ -19,7 +19,7 @@ class SessionService {
     try {
       // Generate JWTs for access and refresh token
       const token = jwt.sign({ userId: user.id }, process.env.API_SECRET as string, {
-        expiresIn: 40, // 15 min.
+        expiresIn: 900, // 15 min.
       });
       const tokenExpire = Date.now() + 900 * 1000;
 

@@ -23,10 +23,16 @@ class ChatRoutes extends BaseRoutes {
         action: ChatController.get,
       },
       {
-        path: '/:id/messages/:page',
+        path: '/:id/messages',
         method: 'get',
         protected: true,
         action: ChatController.getMessages,
+      },
+      {
+        path: '/:id/messages/:page',
+        method: 'get',
+        protected: true,
+        action: ChatController.getMessagesAfterCursor,
       },
     ];
 

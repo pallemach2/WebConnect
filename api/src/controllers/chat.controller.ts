@@ -165,12 +165,12 @@ class ChatController {
    * @param res
    * @param next
    */
-  static getMessages = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
+  static getMessagesAfterCursor = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
     try {
       // Define and validate params
       const schema = yup.object().shape({
         id: yup.string().required('api.errors.validator.idNotEmpty'),
-        page: yup.number().required('api.errors.validator.pageNotEmpty'),
+        cursor: yup.string().required('api.errors.validator.pageNotEmpty'),
       });
       await schema.validate(req.params);
 
@@ -202,8 +202,67 @@ class ChatController {
             },
           },
         },
-        skip: parseInt(req.params.page) * 50 - 50,
+        cursor: {
+          id: req.params.cursor,
+        },
         take: 50,
+        orderBy: {
+          createdAt: 'asc',
+        },
+      });
+
+      res.json(messages);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  /**
+   * GET /:id/messages
+   * @param req
+   * @param res
+   * @param next
+   */
+  static getMessages = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
+    try {
+      // Define and validate params
+      const schema = yup.object().shape({
+        id: yup.string().required('api.errors.validator.idNotEmpty'),
+      });
+      await schema.validate(req.params);
+
+      const prisma = PrismaService.getInstance();
+
+      await prisma.chatParticipant.findFirstOrThrow({
+        where: { userId: req.ctx.user.id, chatId: req.params.id },
+        select: { chatId: true },
+      });
+
+      const messages = await prisma.message.findMany({
+        where: {
+          chatId: req.params.id,
+        },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          edited: true,
+          ChatParticipant: {
+            select: {
+              id: true,
+              User: {
+                select: {
+                  id: true,
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+        take: 50,
+        orderBy: {
+          createdAt: 'asc',
+        },
       });
 
       res.json(messages);

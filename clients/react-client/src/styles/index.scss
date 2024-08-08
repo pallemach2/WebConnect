@@ -1,0 +1,18 @@
+@import "./../styles/colors.scss";
+
+* {
+  font-family: "Roboto", "Arial";
+  box-sizing: border-box;
+  color: $primary-text-color;
+  line-height: 150%;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background: $primary-darken-color;
+}

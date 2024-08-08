@@ -16,6 +16,9 @@ class GeneralController {
    */
   static ping = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
     try {
+      // const a = new Promise((resolve, reject) => setTimeout(() => resolve(true), 2000));
+      // await a;
+
       res.json('pong.');
     } catch (e) {
       next(e);

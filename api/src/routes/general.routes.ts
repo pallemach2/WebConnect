@@ -13,7 +13,7 @@ class GeneralRoutes extends BaseRoutes {
       {
         path: '/ping',
         method: 'get',
-        protected: true,
+        protected: false,
         action: GeneralController.ping,
       },
     ];

@@ -1,0 +1,152 @@
+@import "./../../styles/colors.scss";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .login-container {
+    background-color: $primary-color;
+    width: 400px;
+    padding: 20px 40px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+
+    .error-container {
+      margin-bottom: 20px;
+
+      .title {
+        margin-bottom: 5px;
+        padding: 0;
+        font-weight: bold;
+        color: $error-color;
+      }
+
+      .message {
+        border-left: 1px solid $error-color;
+        border-bottom: 1px solid $error-color;
+        padding: 1px 0 7px 10px;
+        margin: 0;
+        border-radius: 0 0 0 10px;
+
+        p {
+          margin: 0;
+          color: $error-color;
+        }
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 10px 0;
+
+      span {
+        color: $secondary-color;
+      }
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+
+      &:hover label,
+      &:hover input[type="text"],
+      &:hover input[type="password"] {
+        border-width: 2px;
+      }
+
+      &:hover input[type="text"],
+      &:hover input[type="password"] {
+        margin: 0 0 -1px -1px;
+      }
+
+      &:hover label {
+        margin-left: -1px;
+      }
+
+      label {
+        line-height: 15px;
+        font-size: 15px;
+        // margin-bottom: 5px;
+        // font-weight: bold;
+        border-left: 1px solid WHITE;
+        padding-left: 10px;
+        padding-bottom: 5px;
+        margin: 0;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        background-color: $primary-color;
+        border: 0;
+        border-bottom: 1px solid WHITE;
+        border-left: 1px solid WHITE;
+        border-radius: 0 0 0 10px;
+        padding: 1px 0 7px 10px;
+        font-size: 18px;
+        outline: none;
+        margin: 0;
+
+        &:focus {
+          border-width: 2px;
+          margin: 0 0 -1px -1px;
+        }
+      }
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-top: 10px;
+      user-select: none;
+      align-self: center;
+
+      label {
+        font-size: 15px;
+        margin-right: 10px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .action-container {
+      display: flex;
+      justify-content: space-around;
+
+      input[type="button"] {
+        background-color: $secondary-color;
+        color: $primary-color;
+        border: none;
+        padding: 5px 10px;
+        width: 50%;
+        border-radius: 5px;
+        height: 40px;
+        font-size: 15px;
+        font-weight: bold;
+
+        &:first-of-type {
+          margin-right: 5px;
+        }
+
+        &:nth-of-type(2) {
+          margin-left: 5px;
+        }
+
+        &:hover {
+          cursor: pointer;
+          background-color: $secondary-darken-color;
+        }
+
+        &:active {
+          background-color: darken($secondary-darken-color, 10);
+        }
+      }
+    }
+  }
+}
