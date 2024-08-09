@@ -1,6 +1,6 @@
 @import "./../../styles/colors.scss";
 
-.login-container {
+.signup-container {
   background-color: $primary-color;
   width: 400px;
   padding: 20px 40px;
@@ -14,29 +14,22 @@
   }
 
   // Style form
-  form.login-form {
+  form.signup-form {
     display: flex;
     flex-direction: column;
 
-    // Center checkbox
-    div.checkbox-input-container {
-      align-self: center;
+    div.text-input-container {
+      &:nth-of-type(2) {
+        margin-bottom: 40px;
+      }
+
+      &:nth-of-type(4) {
+        margin-bottom: 40px;
+      }
     }
   }
 
-  // position secondary buttons
-  div.action-container {
-    display: flex;
+  button.secondary {
     margin-top: 10px;
-
-    button.secondary {
-      &:first-of-type {
-        margin-right: 5px;
-      }
-
-      &:nth-of-type(2) {
-        margin-left: 5px;
-      }
-    }
   }
 }

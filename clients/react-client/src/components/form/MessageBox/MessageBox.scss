@@ -1,0 +1,58 @@
+@import "../../../styles/colors.scss";
+
+div.message-box-container {
+  p.title {
+    line-height: 15px;
+    font-size: 15px;
+    margin: 0;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: $success-color;
+    border-left: 1px solid $success-color;
+  }
+
+  div.message {
+    border-left: 1px solid $success-color;
+    border-bottom: 1px solid $success-color;
+    padding: 0 0 7px 10px;
+    margin: 0;
+    border-radius: 0 0 0 10px;
+    font-size: 14px;
+
+    p {
+      margin: 0;
+      color: $success-color;
+    }
+  }
+
+  &.error {
+    p.title {
+      color: $error-color;
+      border-color: $error-color;
+    }
+
+    div.message {
+      border-color: $error-color;
+
+      p {
+        color: $error-color;
+      }
+    }
+  }
+
+  &.warning {
+    p.title {
+      color: $warning-color;
+      border-color: $warning-color;
+    }
+
+    div.message {
+      border-color: $warning-color;
+
+      p {
+        color: $warning-color;
+      }
+    }
+  }
+}

@@ -7,6 +7,13 @@
   line-height: 150%;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .bold {
   font-weight: bold !important;
 }

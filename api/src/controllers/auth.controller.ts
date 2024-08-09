@@ -76,13 +76,13 @@ class AuthController {
       const resUsername = await UserService.findByUsername(req.body.email);
 
       if (resMail || resUsername) {
-        throw new Error('api.errors.authentication.userAlreadyExists');
+        throw new Error('api.errors.registration.userAlreadyExists');
       }
 
       // Check if password is valid. Min. 8 chars, one uppercase letter, one lowercase, one number, one special
       // If it doesnt match the regex, it is valid
       const regex = /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/;
-      if (regex.test(req.body.password) === true) throw new Error('api.errors.validator.passwordNotValid');
+      if (regex.test(req.body.password) === true) throw new Error('api.errors.registration.passwordNotValid');
 
       // Hash password
       const passwordEncrypted = await EncryptionService.hash(req.body.password);

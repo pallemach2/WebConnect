@@ -26,11 +26,15 @@ class ApiService {
     });
   }
 
-  static async doRegistration(username: string, password: string) {
-    return fetch("http://Localhost:4000/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
+  static async doRegistration(
+    username: string,
+    password: string,
+    email: string
+  ) {
+    return RequestService.post("/auth/register", {
+      username,
+      password,
+      email,
     });
   }
 

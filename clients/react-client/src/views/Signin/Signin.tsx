@@ -1,20 +1,46 @@
+// Package Imports
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { FormEvent, useState } from "react";
+
+// Custom Imports
 import ApiService from "../../service/api.service";
 import TokenService from "../../service/token.service";
+import TextInput from "../../components/form/TextInput/TextInput";
+import CheckboxInput from "../../components/form/CheckboxInput/CheckboxInput";
+import MessageBox from "../../components/form/MessageBox/MessageBox";
+import ButtonInput from "../../components/form/ButtonInput/ButtonInput";
+import SubmitButtonInput from "../../components/form/SubmitButtonInput/SubmitButtonInput";
+import Logo from "../../components/general/Logo/Logo";
+
+// Styling
 import "./Signin.scss";
-import Checkbox from "../../components/Checkbox/Checkbox";
 
 function Signin() {
+  // Hooks
   const navigate = useNavigate();
+  const search: { registrationComplete?: boolean } = useSearch({
+    from: "/signin",
+  });
+
+  // States
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [messageBoxData, setMessageBoxData] = useState<{
+    type: "success" | "error" | "warning";
+    message: string;
+  }>({
+    type: "success",
+    message: search.registrationComplete
+      ? "Erfolgreich registriert. Melden Sie sich jetzt an!"
+      : "",
+  });
 
+  // Queries
   const login = useMutation({
     mutationFn: () => {
+      // throw "eeee";
       return ApiService.doAuthenticate(username, password);
     },
     onSuccess: (data) => {
@@ -30,64 +56,79 @@ function Signin() {
       navigate({ to: "/chat" });
     },
     onError: (err) => {
-      // Display Error
-      console.log(err);
-      setError("Benutzername oder Passwort ist falsch.");
+      // Default error message
+      let message = "Beim Anmelden ist ein Fehler aufgetreten.";
+
+      // Validation error message
+      if (err.name === "ValidationError") {
+        message = err.message;
+      }
+
+      // Build error message for false credentials
+      if (
+        err.message === "api.errors.authentication.userNotFound" ||
+        err.message === "api.errors.authentication.wrongPassword"
+      ) {
+        message = "Benutzername oder Passwort ist falsch.";
+      }
+
+      // Display MessageBox
+      setMessageBoxData({
+        type: "error",
+        message,
+      });
     },
   });
+
+  // Form submit action
+  const submitForm = (e: FormEvent) => {
+    e.preventDefault();
+    login.mutate();
+  };
 
   return (
     <div className="container">
       <div className="login-container">
-        <h1>
-          Web<span>Connect</span>
-        </h1>
-        {error && (
-          <div className="error-container">
-            <p className="title">Fehler</p>
-            <div className="message">
-              <p>{error}</p>
-            </div>
-          </div>
-        )}
-        <div className={"input-container"}>
-          <label htmlFor="username">Benutzername</label>
-          <input
-            name="username"
-            type="text"
+        <Logo />
+        <MessageBox
+          type={messageBoxData.type}
+          message={messageBoxData.message}
+        />
+        <form className="login-form" onSubmit={submitForm}>
+          <TextInput
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={setUsername}
+            label="Benutzername"
+            required
           />
-        </div>
-        <div className={"input-container"}>
-          <label htmlFor="password">Passwort</label>
-          <input
-            name="password"
-            type="password"
+          <TextInput
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
+            label="Passwort"
+            type="password"
+            required
           />
-        </div>
-        <div
-          className="checkbox-container"
-          onClick={() => setRememberMe(!rememberMe)}
-        >
-          <label htmlFor="rememberMe">Angemeldet bleiben</label>
-          <Checkbox
-            checked={rememberMe}
-            onToggle={() => setRememberMe(!rememberMe)}
+          <CheckboxInput
+            value={rememberMe}
+            onChange={setRememberMe}
+            label="Angemeldet bleiben"
           />
-        </div>
+          <SubmitButtonInput
+            type="primary"
+            label="Anmelden"
+            loading={login.isPending}
+          />
+        </form>
         <div className="action-container">
-          <input
-            type="button"
-            onClick={() => login.mutate()}
-            value={"Anmelden"}
-          />
-          <input
-            type="button"
+          <ButtonInput
+            type="secondary"
+            label="Registrieren"
             onClick={() => navigate({ to: "/signup" })}
-            value={"Registrieren"}
+          />
+          <ButtonInput
+            type="secondary"
+            label="Passwort vergessen"
+            onClick={() => navigate({ to: "/password/forgot" })}
           />
         </div>
       </div>
