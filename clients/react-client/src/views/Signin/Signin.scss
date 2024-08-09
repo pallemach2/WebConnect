@@ -1,6 +1,6 @@
 @import "./../../styles/colors.scss";
 
-.login-container {
+.signin-container {
   background-color: $primary-color;
   width: 400px;
   padding: 20px 40px;
@@ -14,7 +14,7 @@
   }
 
   // Style form
-  form.login-form {
+  form.signin-form {
     display: flex;
     flex-direction: column;
 

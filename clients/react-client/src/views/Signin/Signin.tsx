@@ -88,13 +88,13 @@ function Signin() {
 
   return (
     <div className="container">
-      <div className="login-container">
+      <div className="signin-container">
         <Logo />
         <MessageBox
           type={messageBoxData.type}
           message={messageBoxData.message}
         />
-        <form className="login-form" onSubmit={submitForm}>
+        <form className="signin-form" onSubmit={submitForm}>
           <TextInput
             value={username}
             onChange={setUsername}
