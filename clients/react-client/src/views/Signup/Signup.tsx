@@ -3,7 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormEvent, useState } from "react";
 import ApiService from "../../service/api.service";
 import "./Signup.scss";
-import MessageBox from "../../components/form/MessageBox/MessageBox";
+import MessageBox, {
+  IMessageBoxData,
+} from "../../components/form/MessageBox/MessageBox";
 import TextInput from "../../components/form/TextInput/TextInput";
 import ButtonInput from "../../components/form/ButtonInput/ButtonInput";
 import Logo from "../../components/general/Logo/Logo";
@@ -16,14 +18,12 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
   const [email, setEmail] = useState("");
-  const [messageBoxData, setMessageBoxData] = useState<{
-    type: "success" | "error" | "warning";
-    message: string;
-  }>({
+  const [messageBoxData, setMessageBoxData] = useState<IMessageBoxData>({
     type: "success",
     message: "",
   });
 
+  // Register action
   const register = useMutation({
     mutationFn: () => {
       if (password !== passwordRepeat) throw new Error("passwordsDontMatch");
@@ -101,6 +101,7 @@ function Signup() {
             value={password}
             onChange={setPassword}
             label="Passwort"
+            subLabel="Mind. 8 Zeichen, Buchstaben, Ziffer und Sonderzeichen"
             type="password"
             required
           />

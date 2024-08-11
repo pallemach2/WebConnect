@@ -6,6 +6,11 @@ interface IProps {
   message: string;
 }
 
+export interface IMessageBoxData {
+  type: "success" | "error" | "warning";
+  message: string;
+}
+
 export default function MessageBox({ type, message }: IProps) {
   let title = "Nachricht";
   let className = "success";

@@ -8,7 +8,9 @@ import ApiService from "../../service/api.service";
 import TokenService from "../../service/token.service";
 import TextInput from "../../components/form/TextInput/TextInput";
 import CheckboxInput from "../../components/form/CheckboxInput/CheckboxInput";
-import MessageBox from "../../components/form/MessageBox/MessageBox";
+import MessageBox, {
+  IMessageBoxData,
+} from "../../components/form/MessageBox/MessageBox";
 import ButtonInput from "../../components/form/ButtonInput/ButtonInput";
 import SubmitButtonInput from "../../components/form/SubmitButtonInput/SubmitButtonInput";
 import Logo from "../../components/general/Logo/Logo";
@@ -27,10 +29,7 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [messageBoxData, setMessageBoxData] = useState<{
-    type: "success" | "error" | "warning";
-    message: string;
-  }>({
+  const [messageBoxData, setMessageBoxData] = useState<IMessageBoxData>({
     type: "success",
     message: search.registrationComplete
       ? "Erfolgreich registriert. Melden Sie sich jetzt an!"

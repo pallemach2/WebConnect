@@ -20,6 +20,7 @@ button.button-input {
   display: flex;
   justify-content: center;
   align-items: center;
+  line-height: 15px;
 
   &.primary {
     background-color: $secondary-color;
@@ -46,6 +47,7 @@ button.button-input {
     font-size: 13px;
     font-weight: normal;
     height: 35px;
+    line-height: 13px;
 
     &:hover {
       cursor: pointer;
