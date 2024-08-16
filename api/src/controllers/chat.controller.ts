@@ -57,6 +57,18 @@ class ChatController {
               content: true,
               createdAt: true,
               edited: true,
+              MessageSeen: {
+                select: {
+                  id: true,
+                  ChatParticipant: {
+                    select: {
+                      id: true,
+                      userId: true,
+                    },
+                  },
+                  timestamp: true,
+                },
+              },
               ChatParticipant: {
                 select: {
                   id: true,
@@ -69,9 +81,9 @@ class ChatController {
                 },
               },
             },
-            take: 50,
+            // take: 50,
             orderBy: {
-              createdAt: 'asc',
+              createdAt: 'desc',
             },
           },
         },

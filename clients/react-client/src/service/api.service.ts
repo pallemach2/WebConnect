@@ -40,14 +40,37 @@ class ApiService {
 
   static async doRefresh(token: string, refreshToken: string) {
     return fetch("http://Localhost:4000/api/auth/refresh", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, refreshToken }),
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token,
+        refreshToken,
+      }),
     });
+  }
+
+  static async fetchUserList() {
+    return RequestService.get("/users/all");
   }
 
   static async doPing() {
     return await RequestService.get("/general/ping");
+  }
+
+  static async doPasswordForgot(input: string) {
+    return await RequestService.post("/auth/password/forgot", {
+      input,
+    });
+  }
+
+  static async doPasswordForgotChange(code: string, password: string) {
+    return await RequestService.post("/auth/password/forgot/change", {
+      code,
+      password,
+    });
   }
 }
 

@@ -1,0 +1,59 @@
+@import "../../../styles/colors.scss";
+
+div.message-container {
+  display: flex;
+  justify-content: flex-start;
+
+  &.self {
+    justify-content: flex-end;
+
+    div.message-bubble {
+      background-color: $secondary-color;
+      order: 1;
+    }
+
+    div.message-details {
+      align-items: flex-end;
+      div.message-flags svg {
+        font-size: 15px;
+        padding: 0 3px;
+      }
+    }
+  }
+
+  div.message-bubble {
+    background-color: $primary-darken-color;
+    order: 0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-top: 5px;
+    max-width: 43%;
+  }
+
+  div.message-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: end;
+    margin: 0 5px;
+
+    div.message-flags {
+      line-height: 17px;
+      margin-bottom: 3px;
+
+      svg {
+        font-size: 15px;
+        padding: 0 3px;
+
+        path {
+          color: $secondary-text-color;
+        }
+      }
+    }
+
+    span.message-timestamp {
+      font-size: 12px;
+      color: $secondary-text-color;
+    }
+  }
+}

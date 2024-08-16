@@ -1,5 +1,5 @@
 // Package imports
-import { PrismaClient, User } from '@prisma/client';
+import { PasswordForgot, PrismaClient, User } from '@prisma/client';
 
 // Custom imports
 import PrismaService from '@services/prisma.service';
@@ -90,6 +90,64 @@ class UserService {
     });
 
     await SessionService.deleteAllSessions(userId);
+
+    return user;
+  };
+
+  /**
+   * Generate a forgot password code
+   * @param userid
+   * @returns
+   */
+  static forgotPassword = async (userId: string): Promise<PasswordForgot> => {
+    const prisma = PrismaService.getInstance();
+
+    // Delete all older entries to prevent error
+    await prisma.passwordForgot.deleteMany({
+      where: {
+        userId,
+      },
+    });
+
+    // Create new entry
+    const result = await prisma.passwordForgot.create({
+      data: {
+        validUntil: new Date(Date.now() + 86400 * 1000),
+        userId,
+      },
+    });
+
+    return result;
+  };
+
+  /**
+   * Generate a forgot password code
+   * @param userid
+   * @returns
+   */
+  static forgotPasswordChange = async (code: string, password: string): Promise<User> => {
+    const prisma = PrismaService.getInstance();
+
+    // find forgot password entry
+    const forgotPassword = await prisma.passwordForgot.findUnique({
+      where: {
+        id: code,
+      },
+      select: {
+        id: true,
+        validUntil: true,
+        userId: true,
+      },
+    });
+
+    // Check received code
+    if (!forgotPassword) throw new Error('api.errors.authentication.forgotPasswordCodeInvalid');
+    if (forgotPassword.validUntil.getTime() < Date.now())
+      throw new Error('api.errors.authentication.forgotPasswordCodeExpired');
+
+    // Change password and delete password forgot entry
+    const user = await this.changePassword(forgotPassword.userId, password);
+    await prisma.passwordForgot.delete({ where: { id: code } });
 
     return user;
   };

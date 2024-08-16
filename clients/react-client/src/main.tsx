@@ -20,8 +20,46 @@ const router = createRouter({
   defaultNotFoundComponent: NotFound,
   defaultPendingComponent: Loader,
   defaultPendingMinMs: 5000,
-  defaultPendingMs: 1,
+  defaultPendingMs: 1000,
 });
+
+declare global {
+  interface Date {
+    format(format: string): string;
+  }
+}
+
+Date.prototype.format = function (format) {
+  let date = this;
+  return format.replace(/(yyyy|mm|dd|hh|MM|ss)/gi, (key) => {
+    switch (key) {
+      case "yyyy":
+        return date.getFullYear().toString();
+      case "mm":
+        let x = (date.getMonth() + 1).toString();
+        x = x.length === 1 ? "0" + x : x;
+        return x;
+      case "dd":
+        let y = date.getDate().toString();
+        y = y.length === 1 ? "0" + y : y;
+        return y;
+      case "hh":
+        let z = date.getHours().toString();
+        z = z.length === 1 ? "0" + z : z;
+        return z;
+      case "MM":
+        let a = date.getMinutes().toString();
+        a = a.length === 1 ? "0" + a : a;
+        return a;
+      case "ss":
+        let b = date.getSeconds().toString();
+        b = b.length === 1 ? "0" + b : b;
+        return b;
+      default:
+        return key;
+    }
+  });
+};
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
@@ -39,7 +77,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={QueryService.createQueryClient()}>
         <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </StrictMode>
   );

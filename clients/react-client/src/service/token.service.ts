@@ -1,4 +1,5 @@
 import ApiService from "./api.service";
+import socket from "./socket.service";
 
 class TokenService {
   static tokenFieldName = "x-webconnect-token";
@@ -48,7 +49,7 @@ class TokenService {
   };
 
   static updateUser = (user: {
-    mail: string;
+    avatar: string;
     username: string;
     id: string;
   }) => {
@@ -124,11 +125,22 @@ class TokenService {
     if (res.status === 200) {
       const data = await res.json();
 
+      this.updateUser({
+        id: data.userId,
+        username: data.username,
+        avatar: data.avatar,
+      });
+
       this.updateLocalToken(
         data.token,
         data.tokenExpire,
         this.findRememberMe()
       );
+
+      // Refresh session in socket
+      socket.auth = (cb) => {
+        cb(data.token);
+      };
 
       this.updateLocalRefreshToken(
         data.refreshToken,

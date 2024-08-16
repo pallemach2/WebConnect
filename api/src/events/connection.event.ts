@@ -1,9 +1,11 @@
 // Package imports
 import { Socket } from 'socket.io';
+import Jwt from 'jsonwebtoken';
 
 // Custom imports
 import SocketService from '@services/socket.service';
 import PrismaService from '@services/prisma.service';
+import { JwtPayload } from '@interfaces/auth.interface';
 
 class ConnectionEvent {
   static getEventName() {
@@ -35,7 +37,9 @@ class ConnectionEvent {
 
     // Function to register event
     const registerEvent = (event: any) => {
-      socket.on(event.default.getEventName(), (data: any) => event.default.action(socket, data));
+      socket.on(event.default.getEventName(), (data: any, callback: any) =>
+        event.default.action(socket, data, callback),
+      );
     };
 
     // Attach user listeners
@@ -54,6 +58,30 @@ class ConnectionEvent {
     registerEvent(await import('./message/edit.event'));
     registerEvent(await import('./message/delete.event'));
     registerEvent(await import('./message/seen.event'));
+
+    // Do auth challenge every 60 seconds
+    while (socket.connected) {
+      const wait = new Promise((resolve) => setTimeout(resolve, 60000));
+      await wait;
+
+      socket.timeout(5000).emit('auth-challenge', async (err: boolean, token: string) => {
+        try {
+          // No answer from client
+          if (err) {
+            throw new Error();
+          } else {
+            // Validate JWT
+            const decoded = Jwt.verify(token, process.env.API_SECRET) as JwtPayload;
+            const user = SocketService.getUser(socket);
+
+            if (user.id !== decoded.userId) throw new Error();
+          }
+        } catch (e) {
+          // Disconnect if auth challenge is not fullfilled
+          socket.disconnect(true);
+        }
+      });
+    }
   }
 }
 

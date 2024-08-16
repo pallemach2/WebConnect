@@ -49,7 +49,7 @@ class AuthController {
       delete session.createdAt;
       delete session.userId;
 
-      res.json(session);
+      res.json({ ...session, userId: user.id, username: user.username, avatar: user.avatar });
     } catch (e) {
       next(e);
     }
@@ -123,9 +123,85 @@ class AuthController {
 
       delete session.id;
       delete session.createdAt;
-      delete session.userId;
 
-      res.json(session);
+      let user = null;
+
+      // find user
+      try {
+        user = await UserService.findById(session.userId);
+        if (!user) throw new Error();
+      } catch (e) {
+        throw new Error('api.errors.authentication.userNotFound');
+      }
+
+      res.json({ ...session, username: user.username, avatar: user.avatar });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  /**
+   * POST /password/forgot
+   * @param req
+   * @param res
+   * @param next
+   */
+  static forgotPassword = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
+    try {
+      // Define and validate params
+      const schema = yup.object().shape({
+        input: yup.string().required('api.errors.validator.inputNotEmpty'),
+      });
+      await schema.validate(req.body);
+
+      let user = null;
+      // find user
+      try {
+        user = await UserService.findByMail(req.body.input);
+
+        if (!user) {
+          user = await UserService.findByUsername(req.body.input);
+        }
+
+        if (!user) throw new Error();
+      } catch (e) {
+        throw new Error('api.errors.authentication.userNotFound');
+      }
+
+      // Create a forgot password entry
+      const entry = await UserService.forgotPassword(user.id);
+
+      // sent mail
+      // await MailService.sendPasswordResetMail(user.email, entry.id, user.language);
+
+      res.json({ message: 'Ok.', email: req.body.email });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  /**
+   * POST /password/forgot/change
+   * @param req
+   * @param res
+   * @param next
+   */
+  static forgotPasswordChange = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
+    try {
+      // Define and validate params
+      const schema = yup.object().shape({
+        code: yup.string().required('api.errors.validator.registerCodeNotEmpty'),
+        password: yup.string().required('api.errors.validator.passwordNotEmpty'),
+      });
+      await schema.validate(req.body);
+
+      // Change password
+      const user = await UserService.forgotPasswordChange(req.body.code, req.body.password);
+
+      // Sent mail
+      // await MailService.sendPasswordChangedMail(user.email, user.language);
+
+      res.json({ message: 'Ok.' });
     } catch (e) {
       next(e);
     }

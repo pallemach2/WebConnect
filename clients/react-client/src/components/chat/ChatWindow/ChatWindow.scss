@@ -1,0 +1,8 @@
+@import "../../../styles/colors.scss";
+
+.chat-window-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 5px;
+}

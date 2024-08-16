@@ -1,23 +1,23 @@
+// Package imports
 import { createFileRoute, redirect } from "@tanstack/react-router";
+
+// Custom Imports
 import TokenService from "../service/token.service";
 import Chat from "../views/Chat/Chat";
-import { queryOptions } from "@tanstack/react-query";
-import RequestService from "../service/request.service";
-import QueryService from "../service/query.service";
-
-// Create Request Options for initial data
-const chatsQueryOptions = queryOptions({
-  queryKey: ["chatsInit"],
-  queryFn: () => RequestService.get("/general/ping"),
-});
+import { ChatProvider } from "../context/ChatsContext";
+import { UserOnlineProvider } from "../context/UserOnlineContext";
 
 export const Route = createFileRoute("/chat")({
-  component: Chat,
+  component: () => (
+    <ChatProvider>
+      <UserOnlineProvider>
+        <Chat />
+      </UserOnlineProvider>
+    </ChatProvider>
+  ),
   beforeLoad: () => {
     if (!TokenService.getLocalToken()) {
       throw redirect({ to: "/signin" });
     }
   },
-  loader: () =>
-    QueryService.getQueryClient().ensureQueryData(chatsQueryOptions),
 });

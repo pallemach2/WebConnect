@@ -14,6 +14,7 @@ import MessageBox, {
 import ButtonInput from "../../components/form/ButtonInput/ButtonInput";
 import SubmitButtonInput from "../../components/form/SubmitButtonInput/SubmitButtonInput";
 import Logo from "../../components/general/Logo/Logo";
+import Messages from "../../assets/messages";
 
 // Styling
 import "./Signin.scss";
@@ -21,7 +22,11 @@ import "./Signin.scss";
 function Signin() {
   // Hooks
   const navigate = useNavigate();
-  const search: { registrationComplete?: boolean } = useSearch({
+  const search: {
+    registrationComplete?: boolean;
+    passwordResetComplete?: boolean;
+    passwordForgotComplete?: boolean;
+  } = useSearch({
     from: "/signin",
   });
 
@@ -29,11 +34,22 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [messageBoxData, setMessageBoxData] = useState<IMessageBoxData>({
-    type: "success",
-    message: search.registrationComplete
-      ? "Erfolgreich registriert. Melden Sie sich jetzt an!"
-      : "",
+  const [messageBoxData, setMessageBoxData] = useState((): IMessageBoxData => {
+    let message = "";
+
+    if (search.registrationComplete)
+      message = "Erfolgreich registriert. Melden Sie sich jetzt an!";
+    if (search.passwordForgotComplete)
+      message =
+        "Eine Link zum Passwort zurücksetzen wurde an Ihre Email-Adresse geschickt.";
+    if (search.passwordResetComplete)
+      message =
+        "Ihr Passwort wurde erfolgreich geändert, melden Sie sich jetzt an.";
+
+    return {
+      type: "success",
+      message,
+    };
   });
 
   // Queries
@@ -44,6 +60,11 @@ function Signin() {
     },
     onSuccess: (data) => {
       // Save tokens
+      TokenService.updateUser({
+        id: data.userId,
+        username: data.username,
+        avatar: data.avatar,
+      });
       TokenService.updateLocalToken(data.token, data.tokenExpire, rememberMe);
       TokenService.updateLocalRefreshToken(
         data.refreshToken,
@@ -55,26 +76,12 @@ function Signin() {
       navigate({ to: "/chat" });
     },
     onError: (err) => {
-      // Default error message
-      let message = "Beim Anmelden ist ein Fehler aufgetreten.";
-
-      // Validation error message
-      if (err.name === "ValidationError") {
-        message = err.message;
-      }
-
-      // Build error message for false credentials
-      if (
-        err.message === "api.errors.authentication.userNotFound" ||
-        err.message === "api.errors.authentication.wrongPassword"
-      ) {
-        message = "Benutzername oder Passwort ist falsch.";
-      }
-
       // Display MessageBox
       setMessageBoxData({
         type: "error",
-        message,
+        message:
+          Messages.getMessage(err.message) ||
+          Messages.getMessage("client.errors.authentication"),
       });
     },
   });
@@ -89,6 +96,7 @@ function Signin() {
     <div className="container">
       <div className="signin-container">
         <Logo />
+        <h2>Anmeldung</h2>
         <MessageBox
           type={messageBoxData.type}
           message={messageBoxData.message}

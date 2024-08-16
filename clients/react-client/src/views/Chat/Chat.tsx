@@ -1,31 +1,36 @@
-import { useLoaderData, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import ApiService from "../../service/api.service";
-import TokenService from "../../service/token.service";
+// Package imports
+import { useContext, useEffect } from "react";
+
+// Custom imports
+import Sidebar from "../../components/chat/Sidebar/Sidebar";
+import ChatWindow from "../../components/chat/ChatWindow/ChatWindow";
+import Socket from "../../service/socket.service";
+import { ChatsContext } from "../../context/ChatsContext";
+
+// Styling
+import "./Chat.scss";
+import useWindowFocus from "../../hooks/useWindowFocus";
 
 function Chat() {
-  const navigate = useNavigate();
-  const data = useLoaderData({ from: "/chat" });
-  // const info = useQuery({
-  //   queryKey: ["chats"],
-  //   queryFn: ApiService.fetchChats,
-  //   retry: 2,
-  // });
+  // Hooks
+  const chats = useContext(ChatsContext);
+  const focus = useWindowFocus();
 
+  // Connect socket
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    Socket.connect();
 
-  const logout = () => {
-    TokenService.deleteTokens();
-    navigate({ to: "/signin" });
-  };
+    return () => {
+      Socket.disconnect();
+    };
+  }, []);
+
+  if (chats.isPending) return <></>;
 
   return (
-    <div>
-      Chat
-      <input type="button" onClick={logout} value="logout" />
+    <div className="chat-container">
+      <Sidebar />
+      <ChatWindow />
     </div>
   );
 }

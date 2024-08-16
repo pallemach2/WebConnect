@@ -1,0 +1,123 @@
+@import "../../../styles/colors.scss";
+
+li.chat-preview-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 350px;
+  height: 80px;
+  padding: 3px;
+  padding-right: 20px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+
+  &:hover,
+  &.selected {
+    background-color: $primary-color;
+    cursor: pointer;
+  }
+
+  div.main-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    div.avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: white;
+    }
+
+    div.selected-marker {
+      background-color: $secondary-color;
+      height: 50px;
+      width: 5px;
+      border-radius: 5px;
+      margin-right: 10px;
+
+      &.hidden {
+        background-color: transparent;
+      }
+    }
+
+    div.content-container {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+
+      p {
+        margin: 0;
+      }
+
+      .username {
+        font-size: 15px;
+        color: $primary-text-color;
+        line-height: 15px;
+        padding-bottom: 5px;
+      }
+
+      .message {
+        font-size: 13px;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+
+        span.sender {
+          color: $secondary-color;
+        }
+
+        span {
+          color: $secondary-text-color;
+        }
+      }
+    }
+  }
+
+  div.detail-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+
+    div.timestamp {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      line-height: 13px;
+
+      svg path {
+        color: $secondary-color;
+      }
+
+      span {
+        margin: 0;
+        margin-left: 5px;
+        font-size: 13px;
+        line-height: 13px;
+        color: $secondary-text-color;
+      }
+    }
+
+    span.unread-counter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 28px;
+      height: 26px;
+      background-color: $secondary-color;
+      border-radius: 10px;
+      font-size: 15px;
+      line-height: 15px;
+      color: $primary-color;
+      font-weight: bold;
+      margin-top: 3px;
+
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+  }
+}

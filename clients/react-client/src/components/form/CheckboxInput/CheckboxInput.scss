@@ -8,7 +8,7 @@
 
   label {
     font-size: 15px;
-    margin-right: 10px;
+    margin-right: 6px;
     line-height: 15px;
 
     &:hover {
@@ -25,17 +25,26 @@
   div.checkbox {
     width: 16px;
     height: 16px;
-    background-color: WHITE;
+    background-color: $primary-darken-color;
     border-radius: 3px;
+    border: 2px solid WHITE;
     color: BLACK;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2;
 
+    div.checked-marker {
+      background-color: white;
+      width: 8px;
+      height: 8px;
+      border-radius: 1px;
+    }
+
     .icon,
     .icon path {
-      color: $primary-color !important;
+      font-size: 13px;
+      color: $primary-text-color !important;
     }
 
     &:hover {

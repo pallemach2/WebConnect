@@ -9,11 +9,13 @@ div.text-input-container {
   &:hover input[type="password"] {
     margin: 0 0 -1px -1px;
     border-width: 2px;
+    border-color: $secondary-color;
   }
 
   &:hover label {
     margin-left: -1px;
     border-width: 2px;
+    border-color: $secondary-color;
   }
 
   &:focus-within {
@@ -21,11 +23,13 @@ div.text-input-container {
     input[type="password"] {
       margin: 0 0 -1px -1px;
       border-width: 2px;
+      border-color: $secondary-color;
     }
 
     label {
       margin-left: -1px;
       border-width: 2px;
+      border-color: $secondary-color;
     }
   }
 

@@ -1,0 +1,22 @@
+@import "../../../styles/colors.scss";
+
+div.message-context-menu {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  div.message-context-menu-box {
+    width: 400px;
+    height: 200px;
+    background-color: WHITE;
+    border-radius: 10px;
+    background-color: $primary-color;
+    padding: 20px;
+  }
+}

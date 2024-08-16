@@ -1,0 +1,54 @@
+@import "../../../styles/colors.scss";
+
+div.new-message-bar-container {
+  background-color: $primary-color;
+  margin-bottom: 5px;
+  padding: 20px 20px;
+  border-radius: 10px;
+  display: flex;
+
+  div.input-container {
+    display: flex;
+    border-radius: 10px;
+    background-color: lighten($primary-color, 10);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+
+    input {
+      width: 100%;
+      outline: none;
+      background-color: lighten($primary-color, 10);
+      border: none;
+      border-radius: 10px;
+      padding: 15px 15px;
+      font-size: 18px;
+      line-height: 18px;
+      height: 50px;
+    }
+
+    button {
+      border-radius: 10px;
+      background-color: $primary-color;
+      outline: none;
+      border: none;
+      padding: 10px 30px;
+      height: 40px;
+      margin-right: 5px;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $secondary-color;
+
+        svg path {
+          color: $primary-color;
+        }
+      }
+
+      svg {
+        font-size: 20px;
+      }
+    }
+  }
+}

@@ -28,6 +28,18 @@ class AuthRoutes extends BaseRoutes {
         protected: false,
         action: AuthController.refresh,
       },
+      {
+        path: '/password/forgot',
+        method: 'post',
+        protected: false,
+        action: AuthController.forgotPassword,
+      },
+      {
+        path: '/password/forgot/change',
+        method: 'post',
+        protected: false,
+        action: AuthController.forgotPasswordChange,
+      },
     ];
 
     return routes;

@@ -1,19 +1,27 @@
+// Package imports
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormEvent, useState } from "react";
+
+// Custom imports
 import ApiService from "../../service/api.service";
-import "./Signup.scss";
-import MessageBox, {
-  IMessageBoxData,
-} from "../../components/form/MessageBox/MessageBox";
 import TextInput from "../../components/form/TextInput/TextInput";
 import ButtonInput from "../../components/form/ButtonInput/ButtonInput";
 import Logo from "../../components/general/Logo/Logo";
 import SubmitButtonInput from "../../components/form/SubmitButtonInput/SubmitButtonInput";
+import MessageBox, {
+  IMessageBoxData,
+} from "../../components/form/MessageBox/MessageBox";
+import Messages from "../../assets/messages";
+
+// Styling
+import "./Signup.scss";
 
 function Signup() {
+  // Hooks
   const navigate = useNavigate();
 
+  // States
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
@@ -26,7 +34,8 @@ function Signup() {
   // Register action
   const register = useMutation({
     mutationFn: () => {
-      if (password !== passwordRepeat) throw new Error("passwordsDontMatch");
+      if (password !== passwordRepeat)
+        throw new Error("client.errors.authentication.passwordDoNMotMatch");
       return ApiService.doRegistration(username, password, email);
     },
     onSuccess: () => {
@@ -39,33 +48,12 @@ function Signup() {
       });
     },
     onError: (err) => {
-      // Default error message
-      let message = "Beim Registrieren ist ein Fehler aufgetreten.";
-
-      // Validation error message
-      if (err.name === "ValidationError") {
-        message = err.message;
-      }
-
-      // Build error message for duplicate registers
-      if (err.message === "api.errors.registration.userAlreadyExists") {
-        message = "Benutzername oder Email existiert bereits.";
-      }
-
-      // Build error message for false credentials
-      if (err.message === "api.errors.registration.passwordNotValid") {
-        message = "Ihr Passwort erfüllt nicht alle Kriterien.";
-      }
-
-      // Build error message for false credentials
-      if (err.message === "passwordsDontMatch") {
-        message = "Passwörter stimmen nicht überein.";
-      }
-
       // Display MessageBox
       setMessageBoxData({
         type: "error",
-        message,
+        message:
+          Messages.getMessage(err.message) ||
+          Messages.getMessage("client.errors.registration"),
       });
     },
   });
@@ -80,6 +68,7 @@ function Signup() {
     <div className="container">
       <div className="signup-container">
         <Logo />
+        <h2>Registrierung</h2>
         <MessageBox
           type={messageBoxData.type}
           message={messageBoxData.message}

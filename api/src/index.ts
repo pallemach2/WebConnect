@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { Server } from 'socket.io';
 import http from 'http';
 import cors from 'cors';
+import path from 'path';
 
 // Custom imports
 import Log from '@helpers/Logger';
@@ -18,6 +19,7 @@ import ConnectionEvent from '@events/connection.event';
 import AuthRoutes from '@routes/auth.routes';
 import GeneralRoutes from '@routes/general.routes';
 import ChatRoutes from '@routes/chat.routes';
+import UsersRoutes from '@routes/users.routes';
 
 const main = async () => {
   // Initialize Logger
@@ -31,6 +33,9 @@ const main = async () => {
   const app = express();
   const router = Router();
 
+  // Serve public
+  app.use(express.static(path.join(__dirname, 'public')));
+
   // Middlewares
   app.use(cors());
 
@@ -41,6 +46,7 @@ const main = async () => {
   router.use(AuthRoutes.getRouter()); // --> Add Auth Routes
   router.use(GeneralRoutes.getRouter()); // --> Add Auth Routes
   router.use(ChatRoutes.getRouter()); // --> Add Auth Routes
+  router.use(UsersRoutes.getRouter()); // --> Add Users Routes
 
   router.use(notfoundMiddleware); // --> Handle 404
   router.use(errorMiddleware); // --> Handle errors
@@ -49,9 +55,10 @@ const main = async () => {
 
   const server = http.createServer(app);
   const io = new Server(server, {
-    cors: {
-      origin: '*',
-    },
+    // cors: {
+    //   origin: '*',
+    // },
+    transports: ['websocket'],
   });
 
   io.use(protectionSocketMiddleware); // --> Protection Middleware

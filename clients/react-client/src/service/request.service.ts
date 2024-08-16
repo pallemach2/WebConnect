@@ -18,7 +18,8 @@ class RequestService {
 
       // Redirect to login if session invalid, and remove old tokens
       if (!refresh) {
-        window.location.replace("/signin");
+        console.log("Refresh", refresh);
+        // window.location.replace("/signin");
       }
 
       throw await res.json();
@@ -46,7 +47,8 @@ class RequestService {
 
       // Redirect to login if session invalid, and remove old tokens
       if (!refresh) {
-        window.location.replace("/signin");
+        console.log("Refresh", refresh);
+        // window.location.replace("/signin");
       }
 
       throw await res.json();
