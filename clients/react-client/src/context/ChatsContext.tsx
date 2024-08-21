@@ -77,9 +77,15 @@ export function ChatProvider({ children }: any) {
       chatsQuery.refetch();
     });
 
+    socket.on("message-delete", () => {
+      // TODO: Implement new message without refetch
+      chatsQuery.refetch();
+    });
+
     return () => {
       socket.off("message-new");
       socket.off("message-seen");
+      socket.off("message-delete");
     };
   }, []);
 

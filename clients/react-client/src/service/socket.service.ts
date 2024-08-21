@@ -65,6 +65,7 @@ socket.on("auth-challenge", (cb) => {
 // Logout event
 socket.on("disconnect", () => {
   console.log("disconnect");
+  window.location.reload();
   // TokenService.deleteTokens();
   // window.location.replace("/signin");
 });

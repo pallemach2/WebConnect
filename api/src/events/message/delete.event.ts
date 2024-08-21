@@ -12,7 +12,7 @@ class MessageDeleteEvent {
     return 'message-delete';
   }
 
-  static async action(socket: Socket, data: any) {
+  static async action(socket: Socket, data: any, cb: Function) {
     try {
       // Define and validate params
       const schema = yup.object().shape({
@@ -44,6 +44,7 @@ class MessageDeleteEvent {
 
         // Say to clients to join room
         socket.to(message.chatId).emit('message-delete', { messageId: message.id });
+        cb();
       }
     } catch (e) {
       Logger.error(e);

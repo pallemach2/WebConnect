@@ -1,10 +1,11 @@
 // Styling
+import { ReactNode } from "react";
 import "./ButtonInput.scss";
 
 interface IProps {
   onClick: Function;
   type: "primary" | "secondary";
-  label: string;
+  label: string | ReactNode;
   loading?: boolean;
 }
 

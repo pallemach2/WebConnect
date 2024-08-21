@@ -6,7 +6,7 @@ import {
   faCheckDouble,
   faPencil,
 } from "@fortawesome/free-solid-svg-icons";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useState } from "react";
 import MessageContextMenu from "../MessageContextMenu/MessageContextMenu";
 
 interface IProps {
@@ -28,6 +28,10 @@ const MessageBubble = forwardRef(function MessageBubble(
   { message, participants }: IProps,
   ref: any
 ) {
+  const [contextMenuPosition, setContextMenuPosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
   const [contextMenu, setContextMenu] = useState(false);
   const user = TokenService.getUser();
   let self = message.ChatParticipant.User.id === user.id;
@@ -38,6 +42,7 @@ const MessageBubble = forwardRef(function MessageBubble(
         className="message-bubble"
         onContextMenu={(e) => {
           e.preventDefault();
+          setContextMenuPosition({ x: e.pageX, y: e.pageY });
           setContextMenu(true);
         }}
       >
@@ -59,7 +64,12 @@ const MessageBubble = forwardRef(function MessageBubble(
         </span>
       </div>
       {contextMenu && (
-        <MessageContextMenu close={() => setContextMenu(false)} />
+        <MessageContextMenu
+          close={() => setContextMenu(false)}
+          position={contextMenuPosition}
+          message={message}
+          participantsCounter={participants.length}
+        />
       )}
     </div>
   );

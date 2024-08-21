@@ -1,22 +1,52 @@
 @import "../../../styles/colors.scss";
 
+div.message-context-menu-bg {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 div.message-context-menu {
   position: absolute;
   background: rgba(0, 0, 0, 0.4);
-  width: 100vw;
-  height: 100vh;
-  left: 0;
-  top: 0;
+  background: $primary-darken-color;
+  // width: 250px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  border-radius: 10px;
+  padding: 5px;
 
-  div.message-context-menu-box {
-    width: 400px;
-    height: 200px;
-    background-color: WHITE;
-    border-radius: 10px;
-    background-color: $primary-color;
-    padding: 20px;
+  div.readby-container {
+    display: flex;
+    justify-content: left;
+    padding: 10px;
+
+    svg {
+      margin-right: 10px;
+    }
+
+    span.readby-text {
+      font-size: 14px;
+    }
+  }
+
+  div.actions-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      margin-bottom: 5px;
+      border-top: 1px solid $primary-color;
+      border-radius: 0;
+      justify-content: left;
+      font-size: 14px;
+      svg {
+        margin-right: 10px;
+      }
+    }
   }
 }
