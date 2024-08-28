@@ -8,6 +8,8 @@ import { ChatProvider } from "../context/ChatsContext";
 import { UserOnlineProvider } from "../context/UserOnlineContext";
 
 export const Route = createFileRoute("/chat")({
+  pendingMinMs: 5000,
+  pendingMs: 1000,
   component: () => (
     <ChatProvider>
       <UserOnlineProvider>

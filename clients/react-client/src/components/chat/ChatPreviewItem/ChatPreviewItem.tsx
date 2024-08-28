@@ -2,15 +2,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 
-// Styling
-import "./ChatPreviewItem.scss";
+// Custom imports
 import Avatar from "../Avatar/Avatar";
 import TokenService from "../../../service/token.service";
+import { Chat, ChatParticipant, Message } from "../../../types/prisma";
+
+// Styling
+import "./ChatPreviewItem.scss";
 
 interface IProps {
   selected?: boolean;
-  onClick: Function;
-  chat: any;
+  onClick: () => void;
+  chat: Chat;
 }
 /**
  * Check how many unread messages the user has in chat
@@ -18,12 +21,13 @@ interface IProps {
  * @param userId
  * @returns number
  */
-const getUnreadCounter = (messages: any, userId: string) => {
+const getUnreadCounter = (messages: Message[], userId: string) => {
   let unread = 0;
 
-  messages.forEach((message: any) => {
+  // Iterate over every message and its message seen entries and check if seen
+  messages.forEach((message) => {
     const i = message.MessageSeen.findIndex(
-      (entry: any) => entry.ChatParticipant.userId === userId
+      (entry) => entry.ChatParticipant.userId === userId
     );
     if (i === -1) unread += 1;
   });
@@ -37,8 +41,8 @@ const getUnreadCounter = (messages: any, userId: string) => {
  * @param chatParticipants
  * @returns boolean
  */
-const doubleTick = (message: any, chatParticipants: any) => {
-  return message.MessageSeen.length >= chatParticipants.length - 1;
+const doubleTick = (message: Message, chatParticipants: ChatParticipant[]) => {
+  return message.MessageSeen.length >= chatParticipants.length;
 };
 
 export default function ChatPreviewItem({
@@ -46,28 +50,37 @@ export default function ChatPreviewItem({
   onClick,
   chat,
 }: IProps) {
-  // Get Template data
+  // User and chat data
   const user = TokenService.getUser();
+  let { ChatParticipant, avatar, name } = chat;
+
+  // Get last message in Chat
   const lastMessage = chat.Message.length > 0 ? chat.Message[0] : null;
+
+  // Get counter of unread messages
   const unreadCounter = getUnreadCounter(chat.Message, user.id);
+
+  // Get Content of last message
   const content = lastMessage ? lastMessage.content : "";
+
+  // Is last message from self
   const self = lastMessage
     ? lastMessage.ChatParticipant.User.id === user.id
     : false;
+
+  // Timestamp of last message
   const timestamp = lastMessage
-    ? lastMessage.createdAt !== ""
-      ? new Date(lastMessage.createdAt).format("hh:MM")
-      : ""
+    ? new Date(lastMessage.createdAt).format("hh:MM")
     : "";
 
-  let { ChatParticipant, avatar, name } = chat;
-  let participantsWithoutSelf: any[] = [];
-
-  ChatParticipant.forEach((participant: any) => {
+  // Create array of all chat users without self
+  let participantsWithoutSelf: ChatParticipant[] = [];
+  ChatParticipant.forEach((participant) => {
     if (user.id !== participant.User.id)
       participantsWithoutSelf.push(participant);
   });
 
+  // Determine chat type
   const isGroupChat = participantsWithoutSelf.length > 1;
   const isSingleChat = participantsWithoutSelf.length === 0;
   const isNormalChat = participantsWithoutSelf.length === 1;
@@ -77,27 +90,30 @@ export default function ChatPreviewItem({
 
   if (isGroupChat) {
     image = avatar || "";
-    nameTemp = name;
+    nameTemp = name as string;
   }
 
   if (isNormalChat) {
-    image = participantsWithoutSelf[0].User.avatar;
+    image = participantsWithoutSelf[0].User.avatar as string;
     nameTemp = participantsWithoutSelf[0].User.username;
   }
 
   if (isSingleChat) {
     image = user.avatar;
-    nameTemp = chat.name;
+    nameTemp = chat.name as string;
   }
 
   return (
     <li
       className={"chat-preview-item-container " + (selected && "selected")}
-      onClick={() => onClick()}
+      onClick={onClick}
     >
       <div className="main-container">
         <div className={"selected-marker " + (!selected && "hidden")}></div>
-        <Avatar img={image} />
+        <Avatar
+          img={image}
+          userId={isNormalChat ? participantsWithoutSelf[0].User.id : undefined}
+        />
         <div className="content-container">
           <p className="username">{nameTemp}</p>
           <p className="message">
@@ -113,7 +129,7 @@ export default function ChatPreviewItem({
           {self && (
             <FontAwesomeIcon
               icon={
-                doubleTick(lastMessage, chat.ChatParticipant)
+                doubleTick(lastMessage as Message, chat.ChatParticipant)
                   ? faCheckDouble
                   : faCheck
               }

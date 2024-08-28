@@ -1,11 +1,40 @@
 @import "../../../styles/colors.scss";
 
 div.avatar,
-img.avatar {
+div.avatar img {
   width: 60px;
   height: 60px;
   min-width: 60px;
   min-height: 60px;
   border-radius: 50%;
   background-color: white;
+
+  &.loading {
+    // Animation
+    animation-duration: 1.7s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: placeholderAnimate;
+    background: $primary-color;
+    background: linear-gradient(
+      to right,
+      $primary-color 2%,
+      $primary-darken-color 18%,
+      $primary-color 33%
+    );
+    background-size: 1300px; // Animation Ar
+  }
+
+  .online-dot {
+    position: relative;
+    left: 45px;
+    top: -20px;
+    background-color: $success-color;
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid $primary-darken-color;
+  }
 }

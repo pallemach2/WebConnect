@@ -1,3 +1,4 @@
+// Package imports
 import { useEffect, useState } from "react";
 
 const useWindowFocus = () => {

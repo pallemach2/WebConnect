@@ -56,6 +56,28 @@ li.chat-preview-item-container {
         color: $primary-text-color;
         line-height: 15px;
         padding-bottom: 5px;
+
+        &.loading {
+          width: 150px;
+          background-color: $primary-color;
+          height: 20px;
+          margin-bottom: 5px;
+
+          // Animation
+          animation-duration: 1.7s;
+          animation-fill-mode: forwards;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+          animation-name: placeholderAnimate;
+          background: $primary-color;
+          background: linear-gradient(
+            to right,
+            $primary-color 2%,
+            $primary-darken-color 18%,
+            $primary-color 33%
+          );
+          background-size: 1300px; // Animation Ar
+        }
       }
 
       .message {
@@ -63,6 +85,27 @@ li.chat-preview-item-container {
         overflow: hidden;
         justify-content: center;
         align-items: center;
+
+        &.loading {
+          width: 80px;
+          background-color: $primary-color;
+          height: 15px;
+
+          // Animation
+          animation-duration: 1.7s;
+          animation-fill-mode: forwards;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+          animation-name: placeholderAnimate;
+          background: $primary-color;
+          background: linear-gradient(
+            to right,
+            $primary-color 2%,
+            $primary-darken-color 18%,
+            $primary-color 33%
+          );
+          background-size: 1300px; // Animation Ar
+        }
 
         span.sender {
           color: $secondary-color;

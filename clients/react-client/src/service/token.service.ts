@@ -8,6 +8,8 @@ class TokenService {
   static tokenExpireFieldName = "x-webconnect-token-expire";
   static refreshTokenExpireFieldName = "x-webconnect-refreshtoken-expire";
 
+  static userFieldName = "X-WebConnect-User";
+
   static getLocalToken = () => {
     return (
       localStorage.getItem(this.tokenFieldName) ||
@@ -36,16 +38,24 @@ class TokenService {
     );
   };
 
-  static getUser = () => {
-    if (sessionStorage.getItem("X-WebConnect-User") !== null) {
-      return JSON.parse(sessionStorage.getItem("X-WebConnect-User") as string);
+  static getUser = (): {
+    avatar: string;
+    username: string;
+    id: string;
+  } => {
+    if (sessionStorage.getItem(this.userFieldName) !== null) {
+      return JSON.parse(sessionStorage.getItem(this.userFieldName) as string);
     } else {
-      return null;
+      this.deleteTokens();
+      window.location.reload();
+
+      // Send empty mock data
+      return { avatar: "", username: "", id: "" };
     }
   };
 
   static removeUser = () => {
-    sessionStorage.removeItem("X-WebConnect-User");
+    sessionStorage.removeItem(this.userFieldName);
   };
 
   static updateUser = (user: {
@@ -53,10 +63,10 @@ class TokenService {
     username: string;
     id: string;
   }) => {
-    sessionStorage.setItem("X-WebConnect-User", JSON.stringify(user));
+    sessionStorage.setItem(this.userFieldName, JSON.stringify(user));
   };
 
-  static findRememberMe = () => {
+  static findRememberMe = (): boolean => {
     if (localStorage.getItem(this.tokenFieldName) !== null) {
       return true;
     } else {
@@ -114,6 +124,9 @@ class TokenService {
     localStorage.removeItem(this.refreshTokenExpireFieldName);
     sessionStorage.removeItem(this.tokenExpireFieldName);
     sessionStorage.removeItem(this.refreshTokenExpireFieldName);
+
+    localStorage.removeItem(this.userFieldName);
+    sessionStorage.removeItem(this.userFieldName);
   };
 
   static refreshTokens = async () => {

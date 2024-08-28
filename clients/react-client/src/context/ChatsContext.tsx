@@ -1,21 +1,42 @@
+// Package imports
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+// Custom imports
 import ApiService from "../service/api.service";
 import socket from "../service/socket.service";
+import { Chat } from "../types/prisma";
 
-export const ChatsContext = createContext<any>({
+interface IChatsContext {
+  isPending: boolean;
+  chats: Chat[];
+  setChats: Dispatch<SetStateAction<Chat[]>>;
+  selectedChat: Chat | null;
+  setSelectedChatById: (id: string) => void;
+  refetch: () => void;
+}
+
+// Create Context
+export const ChatsContext = createContext<IChatsContext>({
   isPending: true,
   chats: [],
-  setChats: (chats: any) => {},
+  setChats: () => {},
   selectedChat: null,
-  setSelectedChatById: (id: string) => {},
+  setSelectedChatById: () => {},
   refetch: () => {},
 });
 
 export function ChatProvider({ children }: any) {
   // Hooks
-  const [chats, setChats] = useState([]);
-  const [selectedChat, setSelectedChat] = useState<any>(null);
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
   const chatsQuery = useQuery({
     queryKey: ["chats"],
@@ -56,7 +77,7 @@ export function ChatProvider({ children }: any) {
   // Refresh selectedChat state
   useEffect(() => {
     if (selectedChat !== null) {
-      const index = chats.findIndex((chat: any) => {
+      const index = chats.findIndex((chat) => {
         if (chat.id === selectedChat.id) return true;
         return false;
       });
@@ -82,10 +103,16 @@ export function ChatProvider({ children }: any) {
       chatsQuery.refetch();
     });
 
+    socket.on("message-edit", () => {
+      // TODO: Implement new message without refetch
+      chatsQuery.refetch();
+    });
+
     return () => {
       socket.off("message-new");
       socket.off("message-seen");
       socket.off("message-delete");
+      socket.off("message-edit");
     };
   }, []);
 

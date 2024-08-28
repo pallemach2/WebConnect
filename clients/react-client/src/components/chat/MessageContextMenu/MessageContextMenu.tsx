@@ -1,19 +1,34 @@
-import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import ButtonInput from "../../form/ButtonInput/ButtonInput";
-import "./MessageContextMenu.scss";
-import TokenService from "../../../service/token.service";
+// Package imports
 import {
   faCheck,
   faCheckDouble,
   faCopy,
+  faPaperPlane,
   faPencil,
+  faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
+
+// Custom imports
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import ButtonInput from "../../form/ButtonInput/ButtonInput";
 import { ChatsContext } from "../../../context/ChatsContext";
 import socket from "../../../service/socket.service";
+import TokenService from "../../../service/token.service";
+import EditMenu from "../EditMenu/EditMenu";
+import { Message } from "../../../types/prisma";
 
+// Styling
+import "./MessageContextMenu.scss";
+
+/**
+ * Get a readable string from a date
+ * @param date
+ * @param format
+ * @returns
+ */
 const getReadableDate = (date = new Date(), format = "hh:MM") => {
   const dateObj = new Date(date);
 
@@ -27,25 +42,35 @@ const getReadableDate = (date = new Date(), format = "hh:MM") => {
   return new Date(date).format(format);
 };
 
-export default function MessageContextMenu({
-  close,
-  message,
-  position,
-  participantsCounter,
-}: {
+interface IProps {
   close: Function;
-  message: any;
+  message: Message;
   participantsCounter: number;
   position: {
     x: number;
     y: number;
   };
-}) {
+}
+
+export default function MessageContextMenu({
+  close,
+  message,
+  position,
+  participantsCounter,
+}: IProps) {
+  // Position for context Menu
   const [x, setX] = useState(-100000);
   const [y, setY] = useState(-100000);
-  const { refetch } = useContext(ChatsContext);
-  const { height, width } = useWindowDimensions();
   const ref = useRef<HTMLDivElement>(null);
+  const { height, width } = useWindowDimensions();
+
+  // Open state of edit menu
+  const [editMenu, setEditMenu] = useState(false);
+
+  // Refetch messages
+  const { refetch } = useContext(ChatsContext);
+
+  // Userdata
   const user = TokenService.getUser();
   const self = message.ChatParticipant.User.id === user.id;
 
@@ -58,7 +83,9 @@ export default function MessageContextMenu({
     close();
   };
 
-  const editAction = () => {};
+  const editAction = () => {
+    setEditMenu(true);
+  };
 
   const deleteAction = () => {
     const res = confirm("Sicher das Sie die Nachricht löschen wollen?");
@@ -94,11 +121,25 @@ export default function MessageContextMenu({
         style={{ left: x, top: y }}
         ref={ref}
       >
+        <div className="edited-container">
+          <FontAwesomeIcon icon={faPaperPlane}></FontAwesomeIcon>
+          <span className="edited-text">
+            {getReadableDate(message.createdAt, "dd.mm.yyyy um hh:MM")}
+          </span>
+        </div>
         {self && (
           <ReadBy
             messageSeen={message.MessageSeen}
             participantsCounter={participantsCounter}
           />
+        )}
+        {message.edited && (
+          <div className="edited-container">
+            <FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>
+            <span className="edited-text">
+              {getReadableDate(message.updatedAt, "dd.mm.yyyy um hh:MM")}
+            </span>
+          </div>
         )}
         <div className="actions-container">
           {self && (
@@ -106,11 +147,11 @@ export default function MessageContextMenu({
               type="secondary"
               label={
                 <>
-                  <FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>
+                  <FontAwesomeIcon icon={faPenToSquare}></FontAwesomeIcon>
                   bearbeiten
                 </>
               }
-              onClick={() => {}}
+              onClick={editAction}
             />
           )}
           <ButtonInput
@@ -137,6 +178,9 @@ export default function MessageContextMenu({
           )}
         </div>
       </div>
+      {editMenu && (
+        <EditMenu message={message} close={() => setEditMenu(false)} />
+      )}
     </div>
   );
 }
@@ -154,7 +198,7 @@ const ReadBy = ({ messageSeen, participantsCounter }: any) => {
         <div className="readby-container">
           <FontAwesomeIcon icon={faCheckDouble}></FontAwesomeIcon>
           <span className="readby-text">
-            gesehen: {getReadableDate(readTimestamp.timestamp)}
+            {getReadableDate(readTimestamp.timestamp, "dd.mm.yyyy um hh:MM")}
           </span>
         </div>
       );

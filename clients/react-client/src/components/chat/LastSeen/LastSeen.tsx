@@ -1,10 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+// Package imports
+import { useContext } from "react";
+
+// Custom imports
 import { UserOnlineContext } from "../../../context/UserOnlineContext";
+import { User } from "../../../types/prisma";
 
-const getTimestamp = (date = new Date()) => {
-  return new Date(date).getTime();
-};
-
+/**
+ * Creates a readable string from date object
+ * @param date
+ * @param format
+ * @returns
+ */
 const getReadableDate = (date = new Date(), format = "hh:MM") => {
   const dateObj = new Date(date);
 
@@ -18,52 +24,28 @@ const getReadableDate = (date = new Date(), format = "hh:MM") => {
   return new Date(date).format(format);
 };
 
-export default function LastSeen({
-  userId,
-  usersCounter,
-}: {
+interface IProps {
   userId: string;
   usersCounter: number;
-}) {
+}
+
+export default function LastSeen({ userId, usersCounter }: IProps) {
   const userList = useContext(UserOnlineContext);
-  const [online, setOnline] = useState(false);
-  const [onlineInterval, setOnlineInterval] = useState<any>(null);
 
-  // Manage online live system
-  useEffect(() => {
-    const user = userList.getUserMeta(userId);
-
-    // Check if user is online
-    if (
-      user &&
-      getTimestamp() - getTimestamp(user.lastSeen) < 2000 &&
-      onlineInterval === null &&
-      usersCounter === 1
-    ) {
-      setOnline(true);
-
-      // Check every
-      const interval = setInterval(() => {
-        if (user && getTimestamp() - getTimestamp(user.lastSeen) > 2000)
-          setOnline(false);
-      }, 1000);
-
-      setOnlineInterval(interval);
-    }
-  }, [userList.users]);
-
-  // Clear interval when offline again
-  useEffect(() => {
-    if (!online && onlineInterval && usersCounter === 1) {
-      clearInterval(onlineInterval);
-      setOnlineInterval(null);
-    }
-  }, [online]);
-
+  // Set header content for single chat, group chat, or if user is online
   if (!userList.getUserMeta(userId) || usersCounter === 0) return <></>;
   if (usersCounter > 1) return <>{usersCounter} Mitglieder</>;
-  if (online) return <>Online</>;
+  if (userList.getUserMeta(userId)?.online) return <>Online</>;
+
+  // Show lastseen timestamp or "Nie" if user was never online
   return (
-    <>zul. online: {getReadableDate(userList.getUserMeta(userId).lastSeen)}</>
+    <>
+      zul. online:{" "}
+      {(userList.getUserMeta(userId) as User).lastSeen
+        ? getReadableDate(
+            (userList.getUserMeta(userId) as User).lastSeen as Date
+          )
+        : "Nie"}
+    </>
   );
 }

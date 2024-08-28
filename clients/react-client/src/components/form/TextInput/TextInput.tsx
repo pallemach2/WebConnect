@@ -1,3 +1,6 @@
+// Package imports
+import { Dispatch, SetStateAction } from "react";
+
 // Styling
 import "./TextInput.scss";
 
@@ -7,7 +10,7 @@ interface IProps {
   type?: "password" | "text";
   customClass?: string;
   value: string;
-  onChange: Function;
+  onChange: Dispatch<SetStateAction<string>>;
   required?: boolean;
 }
 

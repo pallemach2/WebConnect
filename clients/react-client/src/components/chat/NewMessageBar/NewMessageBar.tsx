@@ -1,16 +1,21 @@
+// Package imports
 import { useContext, useState } from "react";
-import "./NewMessageBar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+
+// Custom imports
 import socket from "../../../service/socket.service";
 import { ChatsContext } from "../../../context/ChatsContext";
+
+// Styling
+import "./NewMessageBar.scss";
 
 export default function NewMessageBar() {
   const [content, setContent] = useState("");
   const { selectedChat, refetch } = useContext(ChatsContext);
 
   const sendMessage = () => {
-    if (content !== "") {
+    if (content !== "" && selectedChat) {
       socket.emit("message-new", { chatId: selectedChat.id, content }, () => {
         // TODO: implement message without refetching
         refetch();

@@ -1,4 +1,7 @@
+// Package imports
 import { io, Socket } from "socket.io-client";
+
+// Custom imports
 import TokenService from "./token.service";
 
 const socket: Socket = io("http://localhost:4000", {
@@ -49,7 +52,7 @@ socket.on("connect", async () => {
     focus = false;
   });
 
-  // Check if user is actively onlinetea
+  // Check if user is actively online
   while (socket.connected) {
     if (focus) socket.emit("user-online");
     await new Promise((resolve) => setTimeout(resolve, 1000));

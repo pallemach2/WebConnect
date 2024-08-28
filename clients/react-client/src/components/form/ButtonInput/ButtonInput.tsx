@@ -1,9 +1,11 @@
-// Styling
+// Package imports
 import { ReactNode } from "react";
+
+// Styling
 import "./ButtonInput.scss";
 
 interface IProps {
-  onClick: Function;
+  onClick: () => void;
   type: "primary" | "secondary";
   label: string | ReactNode;
   loading?: boolean;

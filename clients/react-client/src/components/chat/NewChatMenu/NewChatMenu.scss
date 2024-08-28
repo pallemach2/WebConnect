@@ -1,0 +1,31 @@
+@import "../../../styles/colors.scss";
+
+div.new-chat-menu {
+  width: 400px;
+  background-color: $primary-color;
+  padding: 20px;
+  border-radius: 10px;
+
+  > p {
+    font-size: 25px;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+
+  form {
+    margin-top: 20px;
+
+    > div.action-container {
+      display: flex;
+
+      button {
+        margin-left: 5px;
+        height: 40px;
+        &:first-of-type {
+          margin-right: 5px;
+          margin-left: 0px;
+        }
+      }
+    }
+  }
+}

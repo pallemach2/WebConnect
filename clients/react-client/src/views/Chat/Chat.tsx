@@ -9,12 +9,10 @@ import { ChatsContext } from "../../context/ChatsContext";
 
 // Styling
 import "./Chat.scss";
-import useWindowFocus from "../../hooks/useWindowFocus";
 
 function Chat() {
   // Hooks
   const chats = useContext(ChatsContext);
-  const focus = useWindowFocus();
 
   // Connect socket
   useEffect(() => {

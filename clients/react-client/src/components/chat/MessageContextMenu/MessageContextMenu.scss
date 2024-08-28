@@ -10,16 +10,16 @@ div.message-context-menu-bg {
 
 div.message-context-menu {
   position: absolute;
-  background: rgba(0, 0, 0, 0.4);
   background: $primary-darken-color;
   // width: 250px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   border-radius: 10px;
   padding: 5px;
 
-  div.readby-container {
+  div.readby-container,
+  div.edited-container {
     display: flex;
     justify-content: left;
     padding: 10px;
@@ -28,7 +28,8 @@ div.message-context-menu {
       margin-right: 10px;
     }
 
-    span.readby-text {
+    span.readby-text,
+    span.edited-text {
       font-size: 14px;
     }
   }

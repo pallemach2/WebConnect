@@ -1,3 +1,4 @@
+// Package imports
 import { QueryClient } from "@tanstack/react-query";
 
 let queryClient: QueryClient | null = null;

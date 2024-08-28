@@ -36,6 +36,7 @@ class ChatController {
           id: true,
           avatar: true,
           name: true,
+          createdAt: true,
           ChatParticipant: {
             select: {
               id: true,
@@ -56,6 +57,7 @@ class ChatController {
               id: true,
               content: true,
               createdAt: true,
+              updatedAt: true,
               edited: true,
               MessageSeen: {
                 select: {

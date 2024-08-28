@@ -1,4 +1,7 @@
+// Package imports
 import { createFileRoute, redirect } from "@tanstack/react-router";
+
+// Custom imports
 import TokenService from "../service/token.service";
 import PasswordForgot from "../views/PasswordForgot/PasswordForgot";
 

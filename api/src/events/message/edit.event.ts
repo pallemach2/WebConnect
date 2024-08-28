@@ -12,7 +12,7 @@ class MessageEditEvent {
     return 'message-edit';
   }
 
-  static async action(socket: Socket, data: any) {
+  static async action(socket: Socket, data: any, cb: Function) {
     try {
       // Define and validate params
       const schema = yup.object().shape({
@@ -79,6 +79,8 @@ class MessageEditEvent {
 
         // Say to clients to join room
         socket.to(message.chatId).emit('message-edit', message);
+
+        cb();
       }
     } catch (e) {
       Logger.error(e);

@@ -1,7 +1,3 @@
-// Package import
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faXmark } from "@fortawesome/free-solid-svg-icons";
-
 // Styling
 import "./CheckboxInput.scss";
 
@@ -21,7 +17,6 @@ export default function CheckboxInput({ label, value, onChange }: IProps) {
         onClick={() => onChange(!value)}
       />
       <div className={"checkbox " + (value && "checked")}>
-        {/* {value && <FontAwesomeIcon icon={faXmark} className="icon" />} */}
         {value && <div className="checked-marker"></div>}
       </div>
     </div>

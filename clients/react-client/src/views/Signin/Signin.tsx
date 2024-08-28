@@ -55,7 +55,6 @@ function Signin() {
   // Queries
   const login = useMutation({
     mutationFn: () => {
-      // throw "eeee";
       return ApiService.doAuthenticate(username, password);
     },
     onSuccess: (data) => {

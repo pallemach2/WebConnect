@@ -31,7 +31,7 @@ declare global {
 
 Date.prototype.format = function (format) {
   let date = this;
-  return format.replace(/(yyyy|mm|dd|hh|MM|ss)/gi, (key) => {
+  return format.replace(/(yyyy|mm|dd|hh|MM|ss|Z)/gi, (key) => {
     switch (key) {
       case "yyyy":
         return date.getFullYear().toString();
@@ -55,6 +55,37 @@ Date.prototype.format = function (format) {
         let b = date.getSeconds().toString();
         b = b.length === 1 ? "0" + b : b;
         return b;
+      case "Z":
+        let month = date.getMonth();
+
+        switch (month) {
+          case 1:
+            return "Januar";
+          case 2:
+            return "Februar";
+          case 3:
+            return "März";
+          case 4:
+            return "April";
+          case 5:
+            return "Mai";
+          case 6:
+            return "Juni";
+          case 7:
+            return "Juli";
+          case 8:
+            return "August";
+          case 9:
+            return "September";
+          case 10:
+            return "Oktober";
+          case 11:
+            return "November";
+          case 12:
+            return "Dezember";
+          default:
+            return "";
+        }
       default:
         return key;
     }
