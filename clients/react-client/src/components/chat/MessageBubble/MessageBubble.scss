@@ -18,7 +18,7 @@ div.date-divider {
 }
 
 div.message-spacer {
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 div.message-container {
@@ -32,6 +32,16 @@ div.message-container {
       background-color: $secondary-color;
       order: 1;
       flex-direction: row;
+
+      &.previousImmediate {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 4px;
+      }
+
+      &.nextImmediate {
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 4px;
+      }
 
       div.message-details {
         margin-left: 10px;
@@ -58,11 +68,19 @@ div.message-container {
     background-color: $primary-darken-color;
     order: 0;
     padding: 10px 15px 10px 15px;
-    border-radius: 10px;
+    border-radius: 15px;
     margin-top: 5px;
-    max-width: 43%;
+    max-width: 50%;
     display: flex;
     flex-direction: row-reverse;
+
+    &.previousImmediate {
+      border-top-left-radius: 4px;
+    }
+
+    &.nextImmediate {
+      border-bottom-left-radius: 4px;
+    }
 
     &.loading {
       background-color: $primary-color;
@@ -81,6 +99,17 @@ div.message-container {
         $primary-darken-color 33%
       );
       background-size: 1300px; // Animation Ar
+    }
+
+    div.content-container {
+      display: flex;
+      flex-direction: column;
+
+      span.creator {
+        font-size: 13px;
+        font-weight: bold;
+        color: $secondary-text-color;
+      }
     }
 
     div.message-details {

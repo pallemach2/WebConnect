@@ -5,6 +5,7 @@ import * as yup from 'yup';
 // Custom imports
 import Rq from '@interfaces/request.interface';
 import PrismaService from '@services/prisma.service';
+import SocketService from '@services/socket.service';
 
 /**
  * Controls all Auth actions
@@ -280,6 +281,38 @@ class ChatController {
       });
 
       res.json(messages);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  /**
+   * POST /:id/messages
+   * @param req
+   * @param res
+   * @param next
+   */
+  static uploadAvatar = async (req: Rq, res: Rs, next: Nx): Promise<void> => {
+    try {
+      if (!req.file) {
+        res.status(500).json({ error: 'No file uploaded' });
+      } else {
+        // Define and validate params
+        const schema = yup.object().shape({
+          id: yup.string().required('api.errors.validator.idNotEmpty'),
+        });
+        await schema.validate(req.params);
+
+        const prisma = PrismaService.getInstance();
+        await prisma.chat.update({ where: { id: req.params.id }, data: { avatar: req.file.filename } });
+
+        // Send changes to all users in room
+        if (SocketService.server) {
+          SocketService.server.to(req.params.id).emit('chat-edit');
+        }
+
+        res.json({ message: 'File uploaded successfully', filename: req.file.filename });
+      }
     } catch (e) {
       next(e);
     }

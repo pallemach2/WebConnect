@@ -1,17 +1,30 @@
 // Package imports
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { User } from '@prisma/client';
-
-export const socketLocals = new WeakMap<Socket, User>();
+import protectionSocketMiddleware from '@middleware/protectionSocket.middleware';
+import ConnectionEvent from '@events/connection.event';
 
 class SocketService {
-  static getUser(socket: Socket) {
-    return socketLocals.get(socket);
+  socketLocals = new WeakMap<Socket, User>();
+  server: Server | null = null;
+
+  getUser(socket: Socket) {
+    return this.socketLocals.get(socket);
   }
 
-  static setUser(socket: Socket, user: User) {
-    return socketLocals.set(socket, user);
+  setUser(socket: Socket, user: User) {
+    return this.socketLocals.set(socket, user);
+  }
+
+  startServer(server: any) {
+    server = new Server(server, {
+      transports: ['websocket'],
+    });
+
+    server.use(protectionSocketMiddleware); // --> Protection Middleware
+    server.on(ConnectionEvent.getEventName(), ConnectionEvent.action); // --> Attach Connection (and all other) listeners
   }
 }
 
-export default SocketService;
+const x = new SocketService();
+export default x;

@@ -33,8 +33,8 @@ export default function LastSeen({ userId, usersCounter }: IProps) {
   const userList = useContext(UserOnlineContext);
 
   // Set header content for single chat, group chat, or if user is online
-  if (!userList.getUserMeta(userId) || usersCounter === 0) return <></>;
-  if (usersCounter > 1) return <>{usersCounter} Mitglieder</>;
+  if (!userList.getUserMeta(userId) || usersCounter < 2) return <></>;
+  if (usersCounter > 2) return <>{usersCounter} Mitglieder</>;
   if (userList.getUserMeta(userId)?.online) return <>Online</>;
 
   // Show lastseen timestamp or "Nie" if user was never online

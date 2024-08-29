@@ -2,6 +2,7 @@
 import Route from '@interfaces/route.interface';
 import BaseRoutes from '@routes/base.routes';
 import ChatController from '@controllers/chat.controller';
+import MulterService from '@services/multer.service';
 
 class ChatRoutes extends BaseRoutes {
   static getPath() {
@@ -33,6 +34,13 @@ class ChatRoutes extends BaseRoutes {
         method: 'get',
         protected: true,
         action: ChatController.getMessagesAfterCursor,
+      },
+      {
+        path: '/:id/avatar',
+        method: 'post',
+        customMiddleware: MulterService.upload.single('file'),
+        protected: true,
+        action: ChatController.uploadAvatar,
       },
     ];
 

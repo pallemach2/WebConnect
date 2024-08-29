@@ -20,6 +20,7 @@ import AuthRoutes from '@routes/auth.routes';
 import GeneralRoutes from '@routes/general.routes';
 import ChatRoutes from '@routes/chat.routes';
 import UsersRoutes from '@routes/users.routes';
+import SocketService from '@services/socket.service';
 
 const main = async () => {
   // Initialize Logger
@@ -53,16 +54,9 @@ const main = async () => {
 
   app.use('/api', router);
 
+  // Start Socket server
   const server = http.createServer(app);
-  const io = new Server(server, {
-    // cors: {
-    //   origin: '*',
-    // },
-    transports: ['websocket'],
-  });
-
-  io.use(protectionSocketMiddleware); // --> Protection Middleware
-  io.on(ConnectionEvent.getEventName(), ConnectionEvent.action); // --> Attach Connection (and all other) listeners
+  SocketService.startServer(server);
 
   // Start API
   server.listen(process.env.API_PORT, () => {

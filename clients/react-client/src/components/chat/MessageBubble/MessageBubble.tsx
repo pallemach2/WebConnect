@@ -71,11 +71,28 @@ const MessageBubble = forwardRef<HTMLDivElement, IProps>(
         60000;
     }
 
+    // Check if next message is within 60 seconds
+    let previousImmediate = false;
+    if (sameDayAsPrevious && previousMessage) {
+      previousImmediate =
+        new Date(message.createdAt).getTime() -
+          new Date(previousMessage.createdAt).getTime() <
+        60000;
+    }
+
     // Check if next message is from same creator
     let nextIsSameCreator = false;
     if (nextMessage) {
       nextIsSameCreator =
         nextMessage.ChatParticipant.User.id === message.ChatParticipant.User.id;
+    }
+
+    // Check if next message is from same creator
+    let previousIsSameCreator = false;
+    if (previousMessage) {
+      previousIsSameCreator =
+        previousMessage.ChatParticipant.User.id ===
+        message.ChatParticipant.User.id;
     }
 
     return (
@@ -87,14 +104,29 @@ const MessageBubble = forwardRef<HTMLDivElement, IProps>(
         )}
         <div className={"message-container " + (self && "self")} ref={ref}>
           <div
-            className="message-bubble"
+            className={
+              "message-bubble " +
+              (nextImmediate && nextIsSameCreator ? "nextImmediate " : "") +
+              (previousImmediate && previousIsSameCreator
+                ? "previousImmediate"
+                : "")
+            }
             onContextMenu={(e) => {
               e.preventDefault();
               setContextMenuPosition({ x: e.pageX, y: e.pageY });
               setContextMenu(true);
             }}
           >
-            <span>{message.content}</span>
+            <div className="content-container">
+              {(!previousIsSameCreator || !previousImmediate) &&
+                !self &&
+                participants.length > 2 && (
+                  <span className="creator">
+                    {message.ChatParticipant.User.username}
+                  </span>
+                )}
+              <span>{message.content}</span>
+            </div>
             <div className="message-details">
               <div className="message-flags">
                 {message.edited && (

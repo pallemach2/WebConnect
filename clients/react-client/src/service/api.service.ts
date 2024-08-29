@@ -1,4 +1,5 @@
 // Custom imports
+import { File } from "buffer";
 import RequestService from "./request.service";
 
 class ApiService {
@@ -112,6 +113,18 @@ class ApiService {
     return await RequestService.post("/auth/password/forgot", {
       input,
     });
+  }
+
+  /**
+   * Change group avatar
+   * @param input
+   * @returns
+   */
+  static async changeGroupAvatar(chatId: string, file: any) {
+    return await RequestService.postFileUpload(
+      "/chat/" + chatId + "/avatar",
+      file
+    );
   }
 
   /**

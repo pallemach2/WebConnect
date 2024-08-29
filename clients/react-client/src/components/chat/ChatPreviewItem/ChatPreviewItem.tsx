@@ -118,8 +118,13 @@ export default function ChatPreviewItem({
           <p className="username">{nameTemp}</p>
           <p className="message">
             {self && <span className="sender">Du: </span>}
+            {isGroupChat && !self && (
+              <span className="sender">
+                {lastMessage?.ChatParticipant.User.username}:{" "}
+              </span>
+            )}
             <span>
-              {content.length > 50 ? content.substr(0, 50) + " ..." : content}
+              {content.length > 50 ? content.substr(0, 40) + "..." : content}
             </span>
           </p>
         </div>

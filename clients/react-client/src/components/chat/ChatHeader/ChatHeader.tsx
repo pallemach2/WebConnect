@@ -1,5 +1,5 @@
 // Package imports
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 // Custom imports
 import TokenService from "../../../service/token.service";
@@ -10,16 +10,21 @@ import LastSeen from "../LastSeen/LastSeen";
 
 // Styling
 import "./ChatHeader.scss";
+import ChatDetailsMenu from "../ChatDetailsMenu/ChatDetailsMenu";
 
 export default function ChatHeader() {
   const { selectedChat, isPending } = useContext(ChatsContext);
+  const [chatDetailsMenu, setChatDetailsMenu] = useState(false);
   const userList = useContext(UserOnlineContext);
   let self = TokenService.getUser();
 
   // Show loading UI
   if (isPending)
     return (
-      <div className="chat-header-container">
+      <div
+        className="chat-header-container"
+        onClick={() => setChatDetailsMenu(true)}
+      >
         <div className="user-information">
           <Avatar loading={true} />
           <div className="user-meta">
@@ -65,18 +70,32 @@ export default function ChatHeader() {
   }
 
   return (
-    <div className="chat-header-container">
-      <div className="user-information">
-        <Avatar img={image} userId={isNormalChat ? users[0].id : undefined} />
-        <div className="user-meta">
-          <p className="username">{nameTemp}</p>
-          <p className="last-seen">
-            {users.length > 0 && (
-              <LastSeen userId={users[0].id} usersCounter={users.length} />
-            )}
-          </p>
+    <>
+      <div
+        className="chat-header-container"
+        onClick={() => setChatDetailsMenu(true)}
+      >
+        <div className="user-information">
+          <Avatar img={image} userId={isNormalChat ? users[0].id : undefined} />
+          <div className="user-meta">
+            <p className="username">{nameTemp}</p>
+            <p className="last-seen">
+              {users.length > 0 && (
+                <LastSeen
+                  userId={users[0].id}
+                  usersCounter={users.length + 1}
+                />
+              )}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+      {chatDetailsMenu && (
+        <ChatDetailsMenu
+          chat={selectedChat}
+          close={() => setChatDetailsMenu(false)}
+        />
+      )}
+    </>
   );
 }

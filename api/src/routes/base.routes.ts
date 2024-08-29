@@ -23,9 +23,17 @@ abstract class BaseRoutes {
       };
 
       if (route.protected) {
-        router[route.method](fullPath, protectionMiddleware, action);
+        if (route.customMiddleware) {
+          router[route.method](fullPath, protectionMiddleware, route.customMiddleware, action);
+        } else {
+          router[route.method](fullPath, protectionMiddleware, action);
+        }
       } else {
-        router[route.method](fullPath, action);
+        if (route.customMiddleware) {
+          router[route.method](fullPath, route.customMiddleware, action);
+        } else {
+          router[route.method](fullPath, action);
+        }
       }
     });
 

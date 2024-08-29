@@ -9,6 +9,10 @@ div.chat-header-container {
   border-radius: 10px;
   width: 100%;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   div.user-information {
     display: flex;
     justify-content: center;

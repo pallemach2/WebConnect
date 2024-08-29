@@ -70,14 +70,61 @@ class RequestService {
   }
 
   /**
+   * Do a POST request to the API
+   * @param url
+   * @param data
+   * @returns
+   */
+  static async postFileUpload(url: string, file: any) {
+    let headers = RequestService.getAuthHeader(true);
+
+    let formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("http://Localhost:4000/api" + url, {
+      method: "post",
+      headers,
+      body: formData,
+    });
+
+    // On success return data
+    if (res.status === 200) {
+      return await res.json();
+    }
+
+    // Try to refresh tokens
+    if (res.status === 401) {
+      const refresh = await TokenService.refreshTokens();
+
+      // Redirect to login if session invalid
+      if (!refresh) {
+        window.location.replace("/signin");
+      }
+
+      throw await res.json();
+    }
+
+    // On all other errors
+    throw await res.json();
+  }
+
+  /**
    * Builds the headers for the api requests, adds access-token
    * @returns
    */
-  static getAuthHeader() {
-    const headers = {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    };
+  static getAuthHeader(withoutContentType = false) {
+    let headers = {};
+
+    if (withoutContentType) {
+      headers = {
+        "Access-Control-Allow-Origin": "*",
+      };
+    } else {
+      headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      };
+    }
 
     if (TokenService.getLocalToken()) {
       return {

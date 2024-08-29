@@ -11,7 +11,7 @@ class ChatEditEvent {
     return 'chat-edit';
   }
 
-  static async action(socket: Socket, data: any) {
+  static async action(socket: Socket, data: any, cb: () => void) {
     // Define and validate params
     const schema = yup.object().shape({
       chatId: yup.string().required('api.errors.validator.chatIdNotEmpty'),
@@ -43,6 +43,8 @@ class ChatEditEvent {
 
     // Inform other clients about new user
     socket.to(chat.id).emit('chat-edit', chat);
+
+    cb();
   }
 }
 

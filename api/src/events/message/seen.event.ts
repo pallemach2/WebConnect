@@ -24,7 +24,7 @@ class MessageSeenEvent {
 
       // Get users
       const user = SocketService.getUser(socket);
-      const message = await prisma.message.findFirstOrThrow({ where: { id: data.messageId } });
+      const message = await prisma.message.findFirstOrThrow({ where: { id: { in: data.messageIds } } });
       const chatParticipant = await prisma.chatParticipant.findFirstOrThrow({
         where: { userId: user.id, chatId: message.chatId },
       });
@@ -63,7 +63,7 @@ class MessageSeenEvent {
       // Say to clients to join room
       socket.to(message.chatId).emit('message-seen', results);
     } catch (e) {
-      Logger.error(e);
+      Logger.error(this, e);
     }
   }
 }
