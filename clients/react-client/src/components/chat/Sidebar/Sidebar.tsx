@@ -26,10 +26,8 @@ export default function Sidebar() {
     // Return all chats ordered by timestamp of last message
     if (searchTerm === "")
       return chats.chats.toSorted((c1, c2) => {
-        const c1Value =
-          c1.Message.length > 0 ? c1.Message[0].createdAt : c1.createdAt;
-        const c2Value =
-          c2.Message.length > 0 ? c2.Message[0].createdAt : c2.createdAt;
+        const c1Value = c1.Message.length > 0 ? c1.Message[0].createdAt : c1.createdAt;
+        const c2Value = c2.Message.length > 0 ? c2.Message[0].createdAt : c2.createdAt;
 
         return new Date(c2Value).getTime() - new Date(c1Value).getTime();
       });

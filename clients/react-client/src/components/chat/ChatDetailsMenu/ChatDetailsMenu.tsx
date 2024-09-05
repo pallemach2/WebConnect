@@ -8,7 +8,6 @@ import {
   faFloppyDisk,
   faImage,
   faPencil,
-  faPenToSquare,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import socket from "../../../service/socket.service";

@@ -1,0 +1,16 @@
+@import '../../../styles/colors.scss';
+
+div.sidebar-container {
+	display: flex;
+	flex-direction: column;
+	padding: 5px;
+
+	ul.chat-preview-list {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 0;
+		overflow-y: scroll;
+		scrollbar-width: none;
+	}
+}

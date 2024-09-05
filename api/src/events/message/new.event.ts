@@ -33,6 +33,15 @@ class MessageNewEvent {
           chatId,
           chatParticipantId: participant.id,
           content: content,
+          MessageSeen: {
+            create: {
+              ChatParticipant: {
+                connect: {
+                  id: participant.id,
+                },
+              },
+            },
+          },
         },
         select: {
           id: true,

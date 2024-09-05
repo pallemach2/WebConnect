@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>WebConnect</title>
+		%sveltekit.head%
+	</head>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			background: #272727;
+		}
+		* {
+			font-family: 'Roboto', 'Arial';
+			box-sizing: border-box;
+			color: WHITE;
+			line-height: 150%;
+			user-select: none;
+		}
+
+		.container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+		.bold {
+			font-weight: bold !important;
+		}
+	</style>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

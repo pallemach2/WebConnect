@@ -1,0 +1,10 @@
+@import './../styles/colors.scss';
+
+@keyframes placeholderAnimate {
+	0% {
+		background-position: -650px 0;
+	}
+	100% {
+		background-position: 650px 0;
+	}
+}

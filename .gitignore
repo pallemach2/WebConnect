@@ -5,6 +5,7 @@
 ### Docker Data ###
 var/
 api/var
+api/src/public
 api/filesystem
 api/logs
 dockerfiles/mysql

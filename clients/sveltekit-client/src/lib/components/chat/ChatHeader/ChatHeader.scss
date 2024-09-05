@@ -1,0 +1,103 @@
+@import '../../../styles/colors.scss';
+
+div.chat-header-container {
+	display: flex;
+	height: 80px;
+	min-height: 80px;
+	background-color: $primary-color;
+	margin-top: 5px;
+	border-radius: 10px;
+	width: 100%;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	div.user-information {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-left: 20px;
+
+		div.avatar.loading {
+			// Animation
+			animation-duration: 1.7s;
+			animation-fill-mode: forwards;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+			animation-name: placeholderAnimate;
+			background: $primary-color;
+			background: linear-gradient(to right, $primary-darken-color 2%, $primary-color 18%, $primary-darken-color 33%);
+			background-size: 1300px; // Animation Ar
+		}
+
+		div.user-meta {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			margin-left: 10px;
+
+			p {
+				padding: 0;
+				margin: 0;
+
+				&.username {
+					font-size: 15px;
+				}
+
+				&.last-seen {
+					font-size: 14px;
+					color: $secondary-text-color;
+				}
+			}
+
+			.username {
+				&.loading {
+					width: 150px;
+					background-color: $primary-darken-color;
+					height: 20px;
+					margin-bottom: 5px;
+
+					// Animation
+					animation-duration: 1.7s;
+					animation-fill-mode: forwards;
+					animation-iteration-count: infinite;
+					animation-timing-function: linear;
+					animation-name: placeholderAnimate;
+					background: $primary-color;
+					background: linear-gradient(
+						to right,
+						$primary-darken-color 2%,
+						$primary-color 18%,
+						$primary-darken-color 33%
+					);
+					background-size: 1300px; // Animation Ar
+				}
+			}
+
+			.last-seen {
+				&.loading {
+					width: 80px;
+					background-color: $primary-darken-color;
+					height: 15px;
+					margin-bottom: 5px;
+
+					// Animation
+					animation-duration: 1.7s;
+					animation-fill-mode: forwards;
+					animation-iteration-count: infinite;
+					animation-timing-function: linear;
+					animation-name: placeholderAnimate;
+					background: $primary-color;
+					background: linear-gradient(
+						to right,
+						$primary-darken-color 2%,
+						$primary-color 18%,
+						$primary-darken-color 33%
+					);
+					background-size: 1300px; // Animation Ar
+				}
+			}
+		}
+	}
+}

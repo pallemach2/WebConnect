@@ -7,7 +7,7 @@ ENV			ENV						dev
 EXPOSE 		5050
 
 WORKDIR     /usr/src/app/appfiles
-ADD         ./clients/svelte-client /usr/src/app/appfiles
+ADD         ./clients/sveltekit-client /usr/src/app/appfiles
 RUN         npm install
 
 CMD         npm run dev -- --host

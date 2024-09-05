@@ -50,7 +50,7 @@ services:
       dockerfile: ./dockerfiles/svelte/Dockerfile
     restart: always
     volumes:
-      - ./clients/svelte-client:/usr/src/app/appfiles
+      - ./clients/sveltekit-client:/usr/src/app/appfiles
     ports:
       - 5050:5050
   phpmyadmin:

@@ -1,5 +1,4 @@
 // Custom imports
-import { File } from "buffer";
 import RequestService from "./request.service";
 
 class ApiService {

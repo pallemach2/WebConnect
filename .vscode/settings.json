@@ -1,0 +1,10 @@
+{
+    "svelte.plugin.svelte.format.config.printWidth": 120,
+    "editor.tabSize": 3,
+    "prettier.printWidth": 120,
+    "svelte.plugin.svelte.compilerWarnings": {
+    "a11y-click-events-have-key-events": "ignore",
+    "a11y-no-noninteractive-element-interactions":"ignore",
+    "a11y-no-static-element-interactions": "ignore"
+},
+}
