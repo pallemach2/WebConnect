@@ -1,4 +1,5 @@
 <script lang="ts">
+	// Various
 	import { onMount } from 'svelte';
 	import socket from '$lib/services/socket.service';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -8,6 +9,13 @@
 	import type { Chat } from '$lib/types/prisma';
 	import QueryService from '$lib/services/query.service';
 
+	// States
+	let selected: Chat | null = null;
+
+	// Register subscriber to selected chat store
+	selectedChat.subscribe((value) => (selected = value));
+
+	// Fetch chats
 	const chatsQuery = createQuery(
 		{
 			queryKey: ['chats'],
@@ -18,11 +26,10 @@
 		QueryService.getQueryClient(),
 	);
 
-	// Get selected chat from store
-	let selected: Chat | null = null;
-	selectedChat.subscribe((value) => (selected = value));
-
-	// Function to set selected chat
+	/**
+	 * Set selected chat by id
+	 * @param id
+	 */
 	export function setSelectedChatById(id: string) {
 		const index = $chatsQuery.data.findIndex((chat: Chat) => {
 			if (chat.id === id) return true;
@@ -51,34 +58,31 @@
 		}
 	}
 
-	// Connect on mount
+	// Register event listeners on mount and connect
 	onMount(() => {
 		socket.on('message-new', () => {
-			// TODO: Implement new message without refetch
 			$chatsQuery.refetch();
 		});
 
 		socket.on('message-seen', () => {
-			// TODO: Implement new message without refetch
 			$chatsQuery.refetch();
 		});
 
 		socket.on('message-delete', () => {
-			// TODO: Implement new message without refetch
 			$chatsQuery.refetch();
 		});
 
 		socket.on('message-edit', () => {
-			// TODO: Implement new message without refetch
 			$chatsQuery.refetch();
 		});
 
 		socket.on('chat-edit', () => {
-			// TODO: Implement new message without refetch
 			$chatsQuery.refetch();
 		});
 
 		socket.connect();
+
+		// Disconnect on unmount and remove event listeners
 		return () => {
 			socket.off('message-new');
 			socket.off('message-seen');

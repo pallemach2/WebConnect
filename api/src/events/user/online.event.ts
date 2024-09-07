@@ -39,7 +39,8 @@ class UserOnlineEvent {
       socket.broadcast.to(chat.chatId).emit('user-online', { userId: user.id, lastSeen: user.lastSeen });
     });
 
-    socket.broadcast.to(user.id).emit('user-online', { userId: user.id, lastSeen: user.lastSeen });
+    // Send to self
+    socket.emit('user-online', { userId: user.id, lastSeen: user.lastSeen });
   }
 }
 

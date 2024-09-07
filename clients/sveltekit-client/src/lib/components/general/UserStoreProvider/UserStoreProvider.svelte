@@ -1,16 +1,22 @@
 <script lang="ts">
+	// Various
 	import { browser } from '$app/environment';
 	import ApiService from '$lib/services/api.service';
 	import socket from '$lib/services/socket.service';
+	import { getTimestamp } from '$lib/services/util.service';
 	import { users } from '$lib/stores/UserStore';
 	import type { User } from '$lib/types/prisma';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { onMount } from 'svelte';
 
-	function getTimestamp(date = new Date()) {
-		return new Date(date).getTime();
-	}
+	// States
+	let timeout: number | null;
+	let userList: User[] = [];
 
+	// Subscribe to users store
+	users.subscribe((value) => (userList = value));
+
+	// Fetch users
 	const usersQuery = createQuery({
 		queryKey: ['users'],
 		queryFn: ApiService.fetchUserList,
@@ -18,12 +24,7 @@
 		retry: 2,
 	});
 
-	let timeout: number | null;
-
-	let userList: User[] = [];
-	users.subscribe((value) => (userList = value));
-
-	// Save users after new request
+	// Save users after new api request
 	$: {
 		if ($usersQuery.status === 'success') {
 			let data: User[] = [];
@@ -39,13 +40,12 @@
 		}
 	}
 
-	// Start a timeout, to check if user still online
+	// Start a timeout, to check if user still online after timeout
 	$: {
 		if (browser) {
 			if (timeout) clearTimeout(timeout);
 
 			timeout = setTimeout(() => {
-				console.log('interval');
 				let updatedUsers = userList;
 				let update = false;
 
@@ -63,11 +63,10 @@
 		}
 	}
 
-	// Connect on mount
+	// Register user-online listener after mount was complete
 	onMount(() => {
 		// Only update lastSeen timestamp when user-online message arrives
 		socket.on('user-online', (data: any) => {
-			console.log('online msg');
 			let index = userList.findIndex((u: any) => u.id === data.userId);
 
 			if (index !== -1) {
@@ -80,6 +79,8 @@
 				users.set(updatedUsers);
 			}
 		});
+
+		// Cleanup user-online listener after unmount
 		return () => {
 			socket.off('user-online');
 

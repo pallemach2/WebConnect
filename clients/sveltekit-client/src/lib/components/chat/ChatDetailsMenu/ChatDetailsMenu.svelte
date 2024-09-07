@@ -1,33 +1,23 @@
 <script lang="ts">
-	import { users } from '$lib/stores/UserStore';
-	import type { Chat, User } from '$lib/types/prisma';
-	import Avatar from '../Avatar/Avatar.svelte';
+	// Styling
 	import './ChatDetailsMenu.scss';
+
+	// Components
+	import Avatar from '../Avatar/Avatar.svelte';
 	import GroupAvatarContainer from './GroupAvatarContainer.svelte';
 	import GroupTitleContainer from './GroupTitleContainer.svelte';
 
+	// Various
+	import { users } from '$lib/stores/UserStore';
+	import type { Chat, User } from '$lib/types/prisma';
+	import { getReadableDate } from '$lib/services/util.service';
+
+	// Props
 	export let chat: Chat;
 	export let close: () => void;
+
+	// States
 	let userList: User[] = [];
-
-	/**
-	 * Creates a readable string from date object
-	 * @param date
-	 * @param format
-	 * @returns
-	 */
-	const getReadableDate = (date = new Date(), format = 'hh:MM') => {
-		const dateObj = new Date(date);
-
-		if (
-			dateObj.getDay() !== new Date().getDay() ||
-			dateObj.getMonth() !== new Date().getMonth() ||
-			dateObj.getFullYear() !== new Date().getFullYear()
-		) {
-			return new Date(date).format('dd.mm.yyyy um hh:MM');
-		}
-		return new Date(date).format(format);
-	};
 
 	// Close the menu on background click
 	const closeMenu = (e: any) => {
@@ -36,6 +26,7 @@
 		}
 	};
 
+	// Subscribe to users store
 	users.subscribe((users) => (userList = users));
 </script>
 
@@ -47,8 +38,9 @@
 		</div>
 		<ul class="members">
 			{#each chat.ChatParticipant as cp (cp.id)}
+				{@const foundUser = userList.find((u) => u.id === cp.User.id)}
 				<li>
-					<Avatar img={userList.find((u) => u.id === cp.User.id)?.avatar} userId={cp.User.id} />
+					<Avatar img={foundUser?.avatar} userId={cp.User.id} />
 					<div class="basic-information">
 						<span class="username">
 							<span>{cp.User.username}</span>
@@ -57,9 +49,9 @@
 							{/if}
 						</span>
 						<span class="online">
-							{#if userList.find((u) => u.id === cp.User.id)?.online}
+							{#if foundUser?.online}
 								Online
-							{:else if userList.find((u) => u.id === cp.User.id)?.lastSeen}
+							{:else if foundUser?.lastSeen}
 								{#each userList as user}
 									{#if user.id === cp.User.id && user.lastSeen}
 										zul. online: {getReadableDate(user.lastSeen)}

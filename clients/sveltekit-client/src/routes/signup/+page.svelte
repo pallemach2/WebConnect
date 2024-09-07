@@ -1,15 +1,15 @@
 <script lang="ts">
-	// Import styling
+	// Styling
 	import './+page.scss';
 
-	// Import components
+	// Components
 	import TextInput from '$lib/components/form/TextInput/TextInput.svelte';
-	import Logo from '$lib/general/Logo/Logo.svelte';
+	import Logo from '$lib/components/general/Logo/Logo.svelte';
 	import SubmitButtonInput from '$lib/components/form/SubmitButtonInput/SubmitButtonInput.svelte';
 	import ButtonInput from '$lib/components/form/ButtonInput/ButtonInput.svelte';
 	import MessageBox from '$lib/components/form/MessageBox/MessageBox.svelte';
 
-	// Import various
+	// Various
 	import { goto } from '$app/navigation';
 	import { createMutation } from '@tanstack/svelte-query';
 	import TokenService from '$lib/services/token.service';

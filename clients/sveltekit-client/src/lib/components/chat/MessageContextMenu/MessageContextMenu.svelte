@@ -11,11 +11,15 @@
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import { faCopy, faPaperPlane, faPencil, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 	import EditMenu from '../EditMenu/EditMenu.svelte';
+	import { getReadableDate } from '$lib/services/util.service';
 
+	// Props
 	export let close: () => void;
 	export let message: Message;
 	export let participantsCounter: number;
 	export let position: { x: number; y: number };
+
+	// States
 	let editMenu = false;
 	let component: HTMLElement | null = null;
 	let user = null;
@@ -25,58 +29,53 @@
 	let innerWidth = 0;
 	let innerHeight = 0;
 
+	// Regsiter listener on chats query
 	let observer = new QueryObserver(QueryService.getQueryClient(), { queryKey: ['chats'] });
 
 	/**
-	 * Get a readable string from a date
-	 * @param date
-	 * @param format
-	 * @returns
+	 * Action to close menu
+	 * @param e
 	 */
-	const getReadableDate = (date = new Date(), format = 'hh:MM') => {
-		const dateObj = new Date(date);
-
-		if (
-			dateObj.getDay() !== new Date().getDay() ||
-			dateObj.getMonth() !== new Date().getMonth() ||
-			dateObj.getFullYear() !== new Date().getFullYear()
-		) {
-			return new Date(date).format('dd.mm.yyyy um hh:MM');
-		}
-		return new Date(date).format(format);
-	};
-
 	const closeAction = (e: any) => {
 		if (e.target.classList.contains('message-context-menu-bg')) close();
 	};
 
+	/**
+	 * Action on message copy
+	 */
 	const copyAction = () => {
 		navigator.clipboard.writeText(message.content);
 		close();
 	};
 
+	/**
+	 * Action on edit message
+	 */
 	const editAction = () => {
-		console.log('test');
 		editMenu = true;
 	};
 
+	/**
+	 * Action on delete message
+	 */
 	const deleteAction = () => {
 		const res = confirm('Sicher das Sie die Nachricht löschen wollen?');
 
 		if (res) {
 			socket.emit('message-delete', { messageId: message.id }, () => {
-				// TODO: implement message without refetching
 				$observer.refetch();
 				close();
 			});
 		}
 	};
 
+	// Get user from localstorage after browser mount
 	if (browser) {
 		user = TokenService.getUser();
 		self = message.ChatParticipant.User.id === user.id;
 	}
 
+	// Set positon of context menu
 	$: {
 		if (component) {
 			const containerHeight = component.offsetHeight || 0;
@@ -92,8 +91,6 @@
 			x = x;
 		}
 	}
-
-	$: console.log(editMenu);
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />

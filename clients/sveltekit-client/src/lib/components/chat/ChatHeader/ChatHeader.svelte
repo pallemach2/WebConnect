@@ -1,14 +1,21 @@
 <script lang="ts">
+	// Styling
+	import './ChatHeader.scss';
+
+	// Components
+	import Avatar from '../Avatar/Avatar.svelte';
+	import ChatDetailsMenu from '../ChatDetailsMenu/ChatDetailsMenu.svelte';
+	import LastSeen from '../LastSeen/LastSeen.svelte';
+
+	// Various
 	import { browser } from '$app/environment';
 	import TokenService from '$lib/services/token.service';
 	import { selectedChat } from '$lib/stores/SelectedChatStore';
 	import { users } from '$lib/stores/UserStore';
 	import type { Chat, ChatParticipant, User } from '$lib/types/prisma';
-	import Avatar from '../Avatar/Avatar.svelte';
-	import ChatDetailsMenu from '../ChatDetailsMenu/ChatDetailsMenu.svelte';
-	import LastSeen from '../LastSeen/LastSeen.svelte';
-	import './ChatHeader.scss';
+	import { getUsersMetaByParticipants } from '$lib/services/util.service';
 
+	// States
 	let userList: User[] = [];
 	let selected: Chat | null = null;
 	let image = '';
@@ -23,32 +30,12 @@
 	users.subscribe((users) => (userList = users));
 	selectedChat.subscribe((chat) => (selected = chat));
 
-	/**
-	 * Returns a list of all users with their details, based on Participant input
-	 * @param cp
-	 * @returns
-	 */
-	const getUsersMetaByParticipants = (cp: ChatParticipant[]) => {
-		const foundUsers: User[] = [];
-
-		cp.forEach((p) => {
-			if (p.User) {
-				const foundUser = userList.find((u) => u.id === p.User.id);
-
-				if (foundUser) foundUsers.push(foundUser);
-			}
-		});
-
-		return foundUsers;
-	};
-
 	$: if (browser && selected) {
 		let self = TokenService.getUser();
 
 		// Get userlist meta data and remove self
-		chatUsers = getUsersMetaByParticipants((selected as Chat).ChatParticipant);
+		chatUsers = getUsersMetaByParticipants((selected as Chat).ChatParticipant, userList);
 		const index = chatUsers.findIndex((u) => u.id === self?.id);
-
 		chatUsers = chatUsers.toSpliced(index, 1);
 
 		// Determine chat type

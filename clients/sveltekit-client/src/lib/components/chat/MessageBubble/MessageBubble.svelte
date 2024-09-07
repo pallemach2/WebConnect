@@ -1,18 +1,26 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import TokenService from '$lib/services/token.service';
-	import type { ChatParticipant, Message } from '$lib/types/prisma';
-	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+	// Style
 	import './MessageBubble.scss';
+
+	// Components
+	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import { faCheck, faCheckDouble, faPencil } from '@fortawesome/free-solid-svg-icons';
 	import MessageContextMenu from '../MessageContextMenu/MessageContextMenu.svelte';
 
+	// Various
+	import { browser } from '$app/environment';
+	import TokenService from '$lib/services/token.service';
+	import type { ChatParticipant, Message } from '$lib/types/prisma';
+	import { doubleTick } from '$lib/services/util.service';
+
+	// Props
 	export let message: Message;
 	export let nextMessage: Message;
 	export let previousMessage: Message;
 	export let participants: ChatParticipant[];
 	export let component: any;
 
+	// States
 	let contextMenuPosition = { x: 0, y: 0 };
 	let contextMenu = false;
 	let user = null;
@@ -23,17 +31,9 @@
 	let previousImmediate = false;
 	let nextIsSameCreator = false;
 	let previousIsSameCreator = false;
+	let doubleTickFlag = false;
 
-	/**
-	 * Checks if all users have read a message
-	 * @param message
-	 * @param chatParticipants
-	 * @returns boolean
-	 */
-	const doubleTick = (message: Message, chatParticipants: ChatParticipant[]) => {
-		return message.MessageSeen.length >= chatParticipants.length;
-	};
-
+	// Set basic parameters every render
 	$: if (browser) {
 		user = TokenService.getUser();
 		self = message.ChatParticipant.User.id === user.id;
@@ -69,6 +69,9 @@
 			previousIsSameCreator = previousMessage.ChatParticipant.User.id === message.ChatParticipant.User.id;
 		}
 	}
+
+	// Set doubletick after every message or participants change
+	$: doubleTickFlag = doubleTick(message, participants);
 </script>
 
 {#if !sameDayAsPrevious}
@@ -100,7 +103,7 @@
 					<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>
 				{/if}
 				{#if self}
-					<FontAwesomeIcon icon={doubleTick(message, participants) ? faCheckDouble : faCheck}></FontAwesomeIcon>
+					<FontAwesomeIcon icon={doubleTickFlag ? faCheckDouble : faCheck}></FontAwesomeIcon>
 				{/if}
 			</div>
 			<span class="message-timestamp">

@@ -7,19 +7,18 @@
 	import MessageBox from '$lib/components/form/MessageBox/MessageBox.svelte';
 	import SubmitButtonInput from '$lib/components/form/SubmitButtonInput/SubmitButtonInput.svelte';
 	import TextInput from '$lib/components/form/TextInput/TextInput.svelte';
-	import Logo from '$lib/general/Logo/Logo.svelte';
+	import Logo from '$lib/components/general/Logo/Logo.svelte';
 
 	// Various
 	import { createMutation } from '@tanstack/svelte-query';
 	import ApiService from '$lib/services/api.service';
 	import { goto } from '$app/navigation';
 	import messages from '$lib/assets/messages';
+	import type { MessageBoxData } from '$lib/types/MessageBoxData';
 
+	// States
 	let input = '';
-	let messageBoxData: {
-		type: 'success' | 'error' | 'warning';
-		message: string;
-	} = {
+	let messageBoxData: MessageBoxData = {
 		type: 'success',
 		message: '',
 	};

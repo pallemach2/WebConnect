@@ -1,35 +1,24 @@
 <script lang="ts">
+	import { getReadableDate } from '$lib/services/util.service';
+
+	// Various
 	import { users } from '$lib/stores/UserStore';
 	import type { User } from '$lib/types/prisma';
 
-	/**
-	 * Creates a readable string from date object
-	 * @param date
-	 * @param format
-	 * @returns
-	 */
-	const getReadableDate = (date = new Date(), format = 'hh:MM') => {
-		const dateObj = new Date(date);
-
-		if (
-			dateObj.getDay() !== new Date().getDay() ||
-			dateObj.getMonth() !== new Date().getMonth() ||
-			dateObj.getFullYear() !== new Date().getFullYear()
-		) {
-			return new Date(date).format('dd.mm.yyyy um hh:MM');
-		}
-		return new Date(date).format(format);
-	};
-
+	// Props
 	export let userId: string;
 	export let usersCounter: number;
+
+	// States
 	let userMeta: User | null = null;
 	let online = false;
 	let lastSeen: Date | null = null;
 
+	// Subscribe to users store
 	users.subscribe((users) => {
 		const res = users.find((u) => u.id === userId);
 		if (res) {
+			// Set state parameters
 			userMeta = res;
 			online = res.online as boolean;
 			lastSeen = res.lastSeen;

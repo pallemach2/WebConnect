@@ -1,11 +1,16 @@
 <script lang="ts">
+	// Styling
 	import './MessageBox.scss';
 
+	// Props
 	export let type: 'error' | 'success' | 'warning';
 	export let message: string;
+
+	// States
 	let title = 'Nachricht';
 	let className = 'success';
 
+	//  Change title and classname if type changes
 	$: {
 		if (type === 'error') {
 			title = 'Fehler';

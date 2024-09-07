@@ -1,21 +1,26 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import messages from '$lib/assets/messages';
+	// Styling
+	import './+page.scss';
+
+	// Components
 	import ButtonInput from '$lib/components/form/ButtonInput/ButtonInput.svelte';
 	import MessageBox from '$lib/components/form/MessageBox/MessageBox.svelte';
 	import SubmitButtonInput from '$lib/components/form/SubmitButtonInput/SubmitButtonInput.svelte';
 	import TextInput from '$lib/components/form/TextInput/TextInput.svelte';
-	import Logo from '$lib/general/Logo/Logo.svelte';
+	import Logo from '$lib/components/general/Logo/Logo.svelte';
+
+	// Various
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import messages from '$lib/assets/messages';
 	import ApiService from '$lib/services/api.service';
 	import { createMutation } from '@tanstack/svelte-query';
+	import type { MessageBoxData } from '$lib/types/MessageBoxData';
 
+	// States
 	let password = '';
 	let passwordRepeat = '';
-	let messageBoxData: {
-		type: 'success' | 'error' | 'warning';
-		message: string;
-	} = {
+	let messageBoxData: MessageBoxData = {
 		type: 'success',
 		message: '',
 	};

@@ -1,32 +1,21 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import TokenService from '$lib/services/token.service';
+	// Components
 	import { faCheck, faCheckDouble } from '@fortawesome/free-solid-svg-icons';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 
+	// Various
+	import { browser } from '$app/environment';
+	import TokenService from '$lib/services/token.service';
+	import { getReadableDate } from '$lib/services/util.service';
+
+	// Props
 	export let messageSeen: any[];
 	export let participantsCounter: number;
+
+	// States
 	let user = null;
 
-	/**
-	 * Get a readable string from a date
-	 * @param date
-	 * @param format
-	 * @returns
-	 */
-	const getReadableDate = (date = new Date(), format = 'hh:MM') => {
-		const dateObj = new Date(date);
-
-		if (
-			dateObj.getDay() !== new Date().getDay() ||
-			dateObj.getMonth() !== new Date().getMonth() ||
-			dateObj.getFullYear() !== new Date().getFullYear()
-		) {
-			return new Date(date).format('dd.mm.yyyy um hh:MM');
-		}
-		return new Date(date).format(format);
-	};
-
+	// Read user from localstorage after browser load
 	if (browser) {
 		user = TokenService.getUser();
 	}

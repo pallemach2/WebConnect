@@ -1,23 +1,34 @@
 <script lang="ts">
+	// Styling
 	import './NewMessageBar.scss';
+
+	// Components
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+
+	// Various
 	import { selectedChat } from '$lib/stores/SelectedChatStore';
 	import type { Chat } from '$lib/types/prisma';
 	import socket from '$lib/services/socket.service';
 	import { QueryObserver } from '@tanstack/svelte-query';
 	import QueryService from '$lib/services/query.service';
 
+	// States
 	let content = '';
 	let selected: Chat | null = null;
 
-	let observer = new QueryObserver(QueryService.getQueryClient(), { queryKey: ['chats'] });
+	// Listen to selected store
 	selectedChat.subscribe((chat) => (selected = chat));
 
+	// Register listener to chats query
+	let observer = new QueryObserver(QueryService.getQueryClient(), { queryKey: ['chats'] });
+
+	/**
+	 * Do send message action
+	 */
 	const sendMessage = () => {
 		if (content !== '' && selected) {
 			socket.emit('message-new', { chatId: selected.id, content }, () => {
-				// TODO: implement message without refetching
 				$observer.refetch();
 			});
 

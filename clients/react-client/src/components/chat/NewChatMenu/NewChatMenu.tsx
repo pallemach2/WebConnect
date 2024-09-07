@@ -1,4 +1,4 @@
-// PAckage imports
+// Package imports
 import { FormEvent, useContext, useState } from "react";
 
 // Custom imports

@@ -1,5 +1,8 @@
 <script lang="ts">
+	// Styling
 	import './+page.scss';
+
+	// Components
 	import Sidebar from '$lib/components/chat/Sidebar/Sidebar.svelte';
 	import UserStoreProvider from '$lib/components/general/UserStoreProvider/UserStoreProvider.svelte';
 	import ChatStoreProvider from '$lib/components/general/ChatStoreProvider/ChatStoreProvider.svelte';

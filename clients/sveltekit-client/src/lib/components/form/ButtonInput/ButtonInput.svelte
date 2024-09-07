@@ -1,6 +1,8 @@
 <script lang="ts">
+	// Styling
 	import './ButtonInput.scss';
 
+	// Props
 	export let type: 'primary' | 'secondary' = 'primary';
 	export let label: string = '';
 	export let loading: boolean = false;

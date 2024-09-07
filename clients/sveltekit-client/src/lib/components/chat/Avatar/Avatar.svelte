@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { users } from '$lib/stores/UserStore';
-	import type { User } from '$lib/types/prisma';
+	// Styling
 	import './Avatar.scss';
 
+	// Various
+	import { users } from '$lib/stores/UserStore';
+
+	// Props
 	export let onlineDot: boolean = false;
 	export let img: string | null = null;
 	export let loading: boolean = false;
 	export let userId: string | null = null;
-	let user: User | null = null;
-	let showDot = false;
 
+	// States
+	let onlineDotLocal = false;
+
+	// Susbcribe to useres store
 	users.subscribe((userList) => {
 		let found = userList.find((u) => u.id === userId);
-		if (found) user = found;
-	});
-
-	$: {
-		if (onlineDot) showDot = true;
-		if (user) {
-			if ((user as User).online) showDot = true;
+		if (found) {
+			onlineDotLocal = found.online || false;
 		}
-	}
+	});
 </script>
 
 {#if loading}
@@ -28,11 +28,11 @@
 {:else if img !== null}
 	<div class="avatar">
 		<img src={'http://localhost:4000/avatar/' + img} alt="" />
-		{#if showDot}<div class="online-dot"></div>{/if}
+		{#if onlineDot || onlineDotLocal}<div class="online-dot"></div>{/if}
 	</div>
 {:else}
 	<div class="avatar">
-		{#if showDot}
+		{#if onlineDot || onlineDotLocal}
 			<div class="online-dot"></div>
 		{/if}
 	</div>

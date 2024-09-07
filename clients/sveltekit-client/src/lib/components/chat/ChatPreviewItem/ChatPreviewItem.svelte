@@ -1,43 +1,24 @@
 <script lang="ts">
+	// Styling
 	import './ChatPreviewItem.scss';
-	import { browser } from '$app/environment';
-	import TokenService from '$lib/services/token.service';
-	import type { Chat, ChatParticipant, Message } from '$lib/types/prisma';
+
+	// Component
 	import { faCheckDouble, faCheck } from '@fortawesome/free-solid-svg-icons';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import Avatar from '../Avatar/Avatar.svelte';
+
+	// Various
+	import { browser } from '$app/environment';
+	import TokenService from '$lib/services/token.service';
+	import type { Chat, ChatParticipant } from '$lib/types/prisma';
 	import { createEventDispatcher } from 'svelte';
+	import { doubleTick, getUnreadCounter } from '$lib/services/util.service';
 
-	/**
-	 * Checks if all users have read a message
-	 * @param message
-	 * @param chatParticipants
-	 * @returns boolean
-	 */
-	const doubleTick = (message: Message, chatParticipants: ChatParticipant[]) => {
-		return message.MessageSeen.length >= chatParticipants.length;
-	};
-
-	/**
-	 * Check how many unread messages the user has in chat
-	 * @param messages
-	 * @param userId
-	 * @returns number
-	 */
-	const getUnreadCounter = (messages: Message[], userId: string) => {
-		let unread = 0;
-
-		// Iterate over every message and its message seen entries and check if seen
-		messages.forEach((message) => {
-			const i = message.MessageSeen.findIndex((entry) => entry.ChatParticipant.userId === userId);
-			if (i === -1) unread += 1;
-		});
-
-		return unread;
-	};
-
+	// Props
 	export let selected: boolean = false;
 	export let chat: Chat;
+
+	// States
 	let lastMessage = null;
 	let unreadCounter = 0;
 	let content = '';
@@ -50,6 +31,7 @@
 	let image = '';
 	let nameTemp = '';
 
+	// Create event dispatcher to send new selected chat event
 	const dispatch = createEventDispatcher();
 
 	if (browser) {

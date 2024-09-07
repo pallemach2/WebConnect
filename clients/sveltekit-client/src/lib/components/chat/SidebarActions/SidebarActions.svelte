@@ -1,28 +1,30 @@
 <script lang="ts">
-	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+	// Styling
 	import './SidebarActions.scss';
-	import { faGear, faPlus } from '@fortawesome/free-solid-svg-icons';
-	import { createEventDispatcher } from 'svelte';
 
+	// Components
+	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+	import { faGear, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import NewChatMenu from '../NewChatMenu/NewChatMenu.svelte';
+
+	// Props
+	export let searchTerm: string;
+
+	// States
 	let newChatMenu = false;
 	let settingsMenu = false;
 
-	const dispatch = createEventDispatcher();
-
+	/**
+	 * Close all menus
+	 */
 	function closeMenu() {
 		newChatMenu = false;
 		settingsMenu = false;
 	}
-
-	// Handle the click
-	function handleChange(event: Event) {
-		const { target } = event;
-		if (target) dispatch('search', { term: (target as HTMLInputElement).value });
-	}
 </script>
 
 <div class="sidebar-actions-container">
-	<input type="text" placeholder="Suche" on:input={handleChange} />
+	<input type="text" placeholder="Suche" bind:value={searchTerm} />
 	<button class="action" on:click={() => (newChatMenu = true)}>
 		<FontAwesomeIcon icon={faPlus} />
 	</button>
@@ -32,7 +34,7 @@
 	{#if settingsMenu || newChatMenu}
 		<div class="sidebar-actions-menu-bg" on:click={closeMenu}>
 			{#if settingsMenu}<div></div>{/if}
-			<!-- {#if newChatMenu}<NewChatMenu close={closeMenu} />{/if} -->
+			{#if newChatMenu}<NewChatMenu close={closeMenu} />{/if}
 		</div>
 	{/if}
 </div>
