@@ -1,0 +1,120 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  email String [unique, not null]
+  username String [unique, not null]
+  password String [not null]
+  active Boolean [not null, default: true]
+  lastSeen DateTime
+  avatar String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Session Session [not null]
+  PasswordForgot PasswordForgot
+  UserSettings UserSettings [not null]
+  ChatParticipant ChatParticipant [not null]
+}
+
+Table UserSettings {
+  id String [pk]
+  User User [not null]
+  userId String [not null]
+  showLastSeen Boolean [not null, default: true]
+  showOnline Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Session {
+  id String [pk]
+  User User [not null]
+  userId String [not null]
+  token String [not null]
+  tokenExpire DateTime [not null]
+  refreshToken String [not null]
+  refreshTokenExpire DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PasswordForgot {
+  id String [pk]
+  User User [not null]
+  userId String [unique, not null]
+  validUntil DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Chat {
+  id String [pk]
+  active Boolean [not null, default: true]
+  avatar String
+  name String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ChatParticipant ChatParticipant [not null]
+  Message Message [not null]
+}
+
+Table ChatParticipant {
+  id String [pk]
+  User User [not null]
+  userId String [not null]
+  Chat Chat [not null]
+  chatId String [not null]
+  creator Boolean [not null, default: false]
+  admin Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Message Message [not null]
+  MessageSeen MessageSeen [not null]
+}
+
+Table Message {
+  id String [pk]
+  Chat Chat [not null]
+  chatId String [not null]
+  ChatParticipant ChatParticipant [not null]
+  chatParticipantId String [not null]
+  content String [not null]
+  edited Boolean [not null, default: false]
+  image String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  MessageSeen MessageSeen [not null]
+}
+
+Table MessageSeen {
+  id String [pk]
+  ChatParticipant ChatParticipant [not null]
+  chatParticipantId String [not null]
+  Message Message [not null]
+  messageId String [not null]
+  timestamp DateTime [default: `now()`, not null]
+}
+
+Table Test {
+  id String [pk]
+}
+
+Ref: UserSettings.userId > User.id [delete: Cascade]
+
+Ref: Session.userId > User.id [delete: Cascade]
+
+Ref: PasswordForgot.userId - User.id [delete: Cascade]
+
+Ref: ChatParticipant.userId > User.id [delete: Cascade]
+
+Ref: ChatParticipant.chatId > Chat.id [delete: Cascade]
+
+Ref: Message.chatId > Chat.id [delete: Cascade]
+
+Ref: Message.chatParticipantId > ChatParticipant.id [delete: Cascade]
+
+Ref: MessageSeen.chatParticipantId > ChatParticipant.id [delete: Cascade]
+
+Ref: MessageSeen.messageId > Message.id [delete: Cascade]
